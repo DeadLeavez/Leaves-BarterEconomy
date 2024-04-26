@@ -1,0 +1,267 @@
+{
+    "useSeed": false, //IF we're gonna use a seed to randomize the barters. 
+    "seed": 123, //Seed of the PRNG, if you use the same, you'll get the same results as someone else using this mod. 
+    //as long as the have the same modlist (or rather, same trader setup), and the same settings in this mod.
+    //the PRNG generator with seed isnt the most amazing. Just a FYI
+
+    "randomizeAfterUpdates": true, //Randomize the barters just before each trader reset
+    "timeToWaitAfterUpdate": 5000, //Time to wait after a trader update in MS. Recommended to not touch unless you run into issues. //Doesnt do anything right now.
+    "dumpTiersToFile": true, //Puts a dump of the tierlist into \mods\Leaves-BarterEconomy\output\
+
+    "tradersToBarter": //Modded traders should work, and has been tested with No;Hurry's kokohekmatyar trader and lotus. 
+    [ //This mod will output all installed traders into the server console, so you can easily find the ID of installed traders.
+        "5a7c2eca46aef81a7ca2145d", //Mechanic
+        "5ac3b934156ae10c4430e83c", //Ragman
+        "5c0647fdd443bc2504c2d371", //Jaeger
+        "54cb50c76803fa8b248b4571", //Prapor
+        "54cb57776803fa99248b456e", //Therapist
+        "5935c25fb3acc3127c3d8cd9", //Peacekeeper
+        "58330581ace78e27b8b10cee" //Skier
+    ],
+
+    "barterCategories": //Categories from wich to draw items that YOU give the traders. The mulit is a multiplier how valuable items from that category are considered. 
+    {
+        "57864bb7245977548b3b66c2": { "multi": 1.5 }, //Tools
+        "57864c8c245977548867e7f1": { "multi": 1.5 }, //Medical Supplies
+        "57864e4c24597754843f8723": { "multi": 1.2 }, //Flammable materials (Lubricant)
+        "57864a3d24597754843f8721": { "multi": 2 }, //Jewelry
+        "57864c322459775490116fbf": { "multi": 1.5 }, //HouseholdGoods
+        "57864a66245977548f04a81f": { "multi": 1.5 }, //Electronics
+        "57864ada245977548638de91": { "multi": 1.3 }, //BuildingMaterial
+        "57864ee62459775490116fc1": { "multi": 1.2 }, //Battery
+        "5d650c3e815116009f6201d2": { "multi": 2 }, //Fuel
+        "590c745b86f7743cc433c5f2": { "multi": 3.5 }, //Other
+        "5645bcb74bdc2ded0b8b4578": { "multi": 1.5 }, //Headset
+        "543be6564bdc2df4348b4568": { "multi": 1.5 }, //Throwable
+        "5448e8d04bdc2ddf718b4569": { "multi": 2 }, //Food
+        "5448e8d64bdc2dce718b4568": { "multi": 2 }, //Drinks
+        "5448f3a64bdc2d60728b456a": { "multi": 2.5 }, //Stimulator
+        "5448f3ac4bdc2dce718b4569": { "multi": 1.5 }, //Injury Treatments
+        "5448f39d4bdc2d0a728b4568": { "multi": 1.5 }, //Medkit
+        "5448f3a14bdc2d27728b4569": { "multi": 1.5 }, //Drugs
+        "5448ecbe4bdc2d60728b4568": { "multi": 0.85 }, //Info items
+        "616eb7aea207f41933308f46": { "multi": 1.2 } //Repair Kits
+    },
+    "tiers": [ 1, 2, 3, 5, 7, 10, 15 ], //Having more tiers will make trades more "fair", but will reduce variance of trades. 
+    "loyaltyMultiplier": [ 0.9, 1.0, 1.1, 1.2 ], //Multipliy the value of items of this loyalty level. Default settings will make early game a bit easier, and late-game a bit harder.
+    "manualTieredItems": //Force a tier on a specific item. But these will override any multiplier above, and any set tiers above.
+    {
+        "62a09f32621468534a797acb": 7, //Pevko Beer
+        "5d0376a486f7747d8050965c": 7, //Military Circuit Board
+        "60391a8b3364dc22b04d0ce5": 7, //Thermite
+        "5751a89d24597722aa0e8db0": 7, //Golden Star Balm
+        "590c657e86f77412b013051d": 7, //Grizzly medkit
+
+        "5d40407c86f774318526545a": 10, //Vodka
+        "5734758f24597738025ee253": 10, //Golden Neck chain
+        "5c052fb986f7746b2101e909": 10, //UHF RFID Reader
+        "590c621186f774138d11ea29": 10, //Flash Drive
+
+        "5d1b36a186f7742523398433": 15, //Metal fuel tank
+        "5d1b371186f774253763a656": 15, //Expeditionary fuel tank
+        "62a0a16d0b9d3c46de5b6e97": 15, //Military Flash drive
+        "5d403f9186f7743cac3f229b": 15, //Whiskey
+        "5d03784a86f774203e7e0c4d": 15, //Military Gyrotachometer
+        "5910968f86f77425cf569c32": 15, //Weapon repairkit
+        "5c12613b86f7743bbe2c3f76": 15, //Intelligence Folder
+        "5d0377ce86f774186372f689": 15, //Iridium
+
+        "59faff1d86f7746c51718c9c": 20, //Physical Bitcoin
+        "5c052f6886f7746b1e3db148": 20, //Military COFDM
+        "591094e086f7747caa7bb2ef": 20, //Body armor repair kit
+        "6389c7750ef44505c87f5996": 20, //Microcontroller Board
+        "5af0534a86f7743b6f354284": 20, //Ophtalmoscope
+        "5c052e6986f7746b207bc3c9": 20, //Defibrillator
+
+        "5d1b2f3f86f774252167a52c": 35, //FP 100 filter
+        "5c05300686f7746dce784e5d": 35, //VPX
+        "57347ca924597744596b4e71": 35, //Graphics card
+        "6389c85357baa773a825b356": 35, //Advanced Current Converter
+        "6389c7f115805221fb410466": 35, //Far forward GPS signal amplifier unit
+        "5d03775b86f774203e7e0c4b": 35, //Phased array element
+        "5c05308086f7746b2101e90b": 35, //Virtex
+
+        "5d03794386f77420415576f5": 60, //Tank battery
+        "5c0530ee86f774697952d952": 60, //Ledx
+        "6389c8c5dbfd5e4b95197e6b": 60, //Blue folder
+        "6389c8fb46b54c634724d847": 60, //Silicon Optoelectronics textbook
+        "6389c92d52123d5dd17f8876": 60 //Advanced Electronics Materials
+    },
+
+    "itemBlacklist": //Items that shouldnt appear for trades. Some seem to be quest items that arent correctly tagged.
+    [
+        "59f32bb586f774757e1e8442", //BEAR DOGTAG
+        "59f32c3b86f77472a31742f0", //USEC DOGTAG
+        "5e99711486f7744bfc4af328", //Sanitar first aid kit (not maked quest for some reason. Well done BSG)
+        "6391fcf5744e45201147080f", //Primorsky Ave apartment key
+        "5e99735686f7744bfc4af32c", //Sanitar's surgery kit...
+        "648c1a965043c4052a4f8505", //Ebudal???
+        "5df8a72c86f77412640e2e83", //Tree ornament (Silver)
+        "5df8a6a186f77412640e2e80", //Tree ornament (Red)
+        "5df8a77486f77412672a1e3f", //Tree ornament (violet)
+        "614451b71e5874611e2c7ae5" //Fake ass vodka. 
+    ],
+
+    "traderCategoriesBlacklist":
+    [
+        "5485a8684bdc2da71d8b4567", //Ammo
+        "5447e0e74bdc2d3c308b4567", //Special Items
+        "543be5dd4bdc2deb348b4569", //Money
+        "5448bc234bdc2d3c308b4569" //Magazines
+    ],
+
+    "tradeBlacklist": //Trade blacklist. Enter SPECIFC trades here. Find the IDs in the \Aki_Data\Server\database\traders\<id>\assort.json 
+    [
+
+    ],
+
+    "enableItemBlacklist": true, //Takes a bit of performace unfortunatley. Will NOT replace barters that include the items specified in the blacklist. Will still copy override if enabled.
+    "tradeItemBlacklist":
+    [
+        "59f32bb586f774757e1e8442", //Dogtag bear
+        "59f32c3b86f77472a31742f0" //Dogtag USEC
+    ],
+
+    "tradeValueOverrides": //Overrides specific item's trade value. If some items are too cheap or too expensive in general. 
+    {
+        "59fb023c86f7746d0d4b423c": 170, //Weapon case
+        "567143bf4bdc2d1a0f8b4567": 15, //Pistol Case
+        "5d235bb686f77443f4331278": 320, //S I C C case
+        "59fb042886f7746c5005a7b2": 180 //Item case
+    },
+
+    "maxNumItems": 10,
+    "maxRandomNumItems": 5,
+
+    "valueStep": 15000, //How much rubles each tier is. Tier 1 is < 15000, tier 2 is < 30000 etc.
+    "maxBarterValue": 1619, //Maximum value a trade can have. I recommend putting this at a  prime number. Why? Cus I said so. Fewer divisors
+    "maxsteps": 15, //Any item above this thier is forced to this tier.
+
+    /***
+    *These two modifiers could be seen as the "difficulty" of the mod. 
+    */
+    "valueExtraCost": 0, //How many extra tiers an item is worth, added after the multiplicative modifier below
+    "valueMultiplier": 1.5, //The value of the item being sold. The higher, the more items/valuable items is necessary to buy an item.
+
+    "randomTierdownStepStart": 5, //Items that are sold above this tier will randomly start looking for items using the divisor below. 
+    //Will not make items "cheaper", rather make them cost MORE stuff, but lower tier stuff
+
+    "randomTierdownSteps": [ 0, 0, 0, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6, 6, 7 ], //Will randomly select one of the elements in the array, and step down that many.
+
+    "valueCutoff": 2500, //If an item's cost is below this value, it will be purchaseable with regular currencies.
+    "overrideExistingBarters": true, //Will replace existing barters with new barter options.
+    "copyOverrideExistingBarters": true, //Will copy every barter into a newly randomized barter. 
+
+    "maxValueOverHandbookMultiplier": 5, //An item will not get a value above the handbook value times this number
+
+    "writeLog": true, //Write to log, Makes trader update take a bit longer. 
+    "writeLogLocale": "en", //Locale to write the log in. Will default to en if not found.
+
+    "cashTradeEnabled": true, //Enable cash trades. These are trades that should be barter trades, but are instead cash trades.
+    "cashTradeChance": 0.04, //Chance of a cash trade.
+    "cashTradeMinValue": 75000, //Minimum value of a cash trade.
+    "cashTradeMultiplier": 5, //Multiplier of the value of a cash trade.
+
+    "barterizeFleamarket": false, //Barterize the flea market. Will make the flea market a bit more interesting.
+    "offersPerItem": //Total offers per item. Default is 7-30 per item. But this is INCREDIBLY SLOW to generate. I highly recommend not using too many offers per item.
+    //Only applies if barterizeFleamarket is true.
+    { 
+        "min": 2, //Minimum offers per item
+        "max": 4  //Maximum offers per item
+    } 
+    
+    //List of available locales: 
+    /*
+    "ch": "Chinese",
+    "cz": "Czech",
+    "en": "English",
+    "es": "Spanish",
+    "es-mx": "Spanish (Mexico)",
+    "fr": "French",
+    "ge": "German",
+    "hu": "Hungarian",
+    "it": "Italian",
+    "jp": "Japanese",
+    "kr": "Korean",
+    "pl": "Polish",
+    "po": "Portuguese",
+    "ro": "Romanian",
+    "ru": "Russian",
+    "sk": "Slovak",
+    "tu": "Turkish"
+    */
+}
+
+
+
+/* Unused categories. Feel free to add at your own leisure. 
+"57bef4c42459772e8d35a53b": { "multi": 1 }, //GearComponents
+"5448e54d4bdc2dcc718b4568": { "multi": 1 }, //Armor
+"5448bf274bdc2dfc2f8b456a": { "multi": 1 }, //Secured Containers
+"5671435f4bdc2d96058b4569": { "multi": 1 }, //Containers & Case
+"5795f317245977243854e041": { "multi": 1 }, //Simple Containers
+"5448e5284bdc2dcb718b4567": { "multi": 1 }, //Vest
+"5448e53e4bdc2d60728b4567": { "multi": 1 }, //Backpack
+"5448e5724bdc2ddf718b4568": { "multi": 1 }, //Visor
+"5a341c4086f77401f2541505": { "multi": 1 }, //Headwear
+"5a341c4686f77469e155819e": { "multi": 1 }, //Facecover
+"5b3f15d486f77432d0509248": { "multi": 1 }, //Armband
+"644120aa86ffbe10ee032b6f": { "multi": 1 }, //ArmorPlate
+
+"55818a304bdc2db5418b457d": { "multi": 1 }, //Receiver
+"55818a684bdc2ddd698b456d": { "multi": 1 }, //PistolGrip
+"56ea9461d2720b67698b456f": { "multi": 1 }, //Gasblock
+"55818a104bdc2db9688b4569": { "multi": 1 }, //Handguard
+"555ef6e44bdc2de9068b457e": { "multi": 1 }, //Barrel
+"55818a594bdc2db9688b456a": { "multi": 1 }, //Stock
+"55818b224bdc2dde698b456f": { "multi": 1 }, //Mounts
+"5448bc234bdc2d3c308b4569": { "multi": 1 }, //Magazines
+"55818b014bdc2ddc698b456b": { "multi": 1 }, //Launcher
+"627a137bf21bc425b06ab944": { "multi": 1 }, //Grenade Launcher Magazine
+"610720f290b75a49ff2e5e25": { "multi": 1 }, //CylinderMagazine
+"55818a6f4bdc2db9688b456b": { "multi": 1 }, //Charging Handle
+"5a74651486f7744e73386dd1": { "multi": 1 }, //AuxiliaryMod
+"55818afb4bdc2dde698b456d": { "multi": 1 }, //Bipods
+"55818af64bdc2d5b648b4570": { "multi": 1 }, //Foregrips
+"55818b084bdc2d5b648b4571": { "multi": 1 }, //Flashlights
+"5b5f73c486f77447ec5d7704": { "multi": 1 }, //Laser target pointers
+"55818b164bdc2ddc698b456c": { "multi": 1 }, //Tactical combo devices
+"550aa4bf4bdc2dd6348b456b": { "multi": 1 }, //Flashhiders & brakes
+"5b5f72f786f77447ec5d7702": { "multi": 1 }, //Muzzle adapters
+"550aa4cd4bdc2dd8348b456c": { "multi": 1 }, //Silencer
+"550aa4dd4bdc2dc9348b4569": { "multi": 1 }, //MuzzleCombo
+
+"55818add4bdc2d5b648b456f": { "multi": 1 }, //Assault scopes
+"55818ad54bdc2ddc698b4569": { "multi": 1 }, //Collimators
+"55818acf4bdc2dde698b456b": { "multi": 1 }, //Compact collimators
+"55818ac54bdc2d5b648b456e": { "multi": 1 }, //Iron sights
+"55818ae44bdc2dde698b456c": { "multi": 1 }, //Optics
+"55818aeb4bdc2ddc698b456a": { "multi": 1 }, //Special scopes
+"5a2c3a9486f774688b05e574": { "multi": 1 }, //Night vison
+
+"5447e1d04bdc2dff2f8b4567": { "multi": 1 }, //Melee Weapons
+"5447bed64bdc2d97278b4568": { "multi": 1 }, //Machine Guns
+"5447b6254bdc2dc3278b4568": { "multi": 1 }, //SnipersRifles
+"5447b5e04bdc2d62278b4567": { "multi": 1 }, //Smgs
+"5447b6094bdc2dc3278b4567": { "multi": 1 }, //Shotguns
+"5447b5cf4bdc2d65278b4567": { "multi": 1 }, //Pistol
+"617f1ef5e8b54b0998387733": { "multi": 1 }, //Revolver
+"5447b6194bdc2d67278b4567": { "multi": 1 }, //MarksmanRifles
+"5447b5f14bdc2d61278b4567": { "multi": 1 }, //AssaultRifles
+"5447b5fc4bdc2d87278b4567": { "multi": 1 }, //AssaultCarbines
+"5447bedf4bdc2d87278b4568": { "multi": 1 }, //GrenadeLauncher
+
+"543be5cb4bdc2deb348b4568": { "multi": 1 }, //Ammobox
+"5485a8684bdc2da71d8b4567": { "multi": 1 }, //Rounds
+
+
+"5c164d2286f774194c5e69fa": { "multi": 1 }, //Keycards
+"5c99f98d86f7745c314214b3": { "multi": 1 }, //MechanicalKeys
+
+"5447e0e74bdc2d3c308b4567": { "multi": 1 }, //Special Equipments
+"5f4fbaaca5573a5ac31db429": { "multi": 1 }, //Compass
+"61605ddea09d851a0a0c1bbc": { "multi": 1 }, //Portable Range Finder
+"567849dd4bdc2d150f8b456e": { "multi": 1 }, //Maps
+"543be5dd4bdc2deb348b4569": { "multi": 1 }, //Money
+"62f109593b54472778797866": { "multi": 1 }, //RandomLootContainer
+*/
