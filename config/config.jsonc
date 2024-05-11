@@ -127,7 +127,8 @@
         "59fb023c86f7746d0d4b423c": 170, //Weapon case
         "567143bf4bdc2d1a0f8b4567": 15, //Pistol Case
         "5d235bb686f77443f4331278": 320, //S I C C case
-        "59fb042886f7746c5005a7b2": 180 //Item case
+        "59fb042886f7746c5005a7b2": 180, //Item case
+        "5c94bbff86f7747ee735c08f": 20 //Terragroup Labs access keycard
     },
 
     "maxNumItems": 10,
@@ -146,7 +147,7 @@
     "randomTierdownStepStart": 5, //Items that are sold above this tier will randomly start looking for items using the divisor below. 
     //Will not make items "cheaper", rather make them cost MORE stuff, but lower tier stuff
 
-    "randomTierdownSteps": [ 0, 0, 0, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6, 6, 7 ], //Will randomly select one of the elements in the array, and step down that many.
+    "randomTierdownSteps": [ 0, 0, 0, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 5, 5, 6, 6, 7 ], //Will randomly select one of the elements in the array, and step down that many steps.
 
     "valueCutoff": 2500, //If an item's cost is below this value, it will be purchaseable with regular currencies.
     "overrideExistingBarters": true, //Will replace existing barters with new barter options.
