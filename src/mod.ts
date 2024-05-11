@@ -120,9 +120,9 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
                     {
                         const date = this.timeUtil.getDate();
                         const time = this.timeUtil.getTime();
-                        const datestring: string = `_${ date }_${ time }_`;
+                        const dateString: string = `_${ date }_${ time }_`;
                         const nickname = traders[ this.tradersToUpdate[ traderNum ] ].base.nickname;
-                        this.currentLogFile = "trades_" + datestring + nickname + ".txt";
+                        this.currentLogFile = "trades_" + dateString + nickname + ".txt";
                         this.writeLogFileLine( "[Updating Trader:" + traders[ this.tradersToUpdate[ traderNum ] ].base.nickname + "]" );
                         this.writeLogFileLine( "-------------------------------------------" );
                     }
@@ -379,9 +379,9 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
         {
             for ( let i in barterList[ value ] )
             {
-                let localename = this.tables.locales.global.en[ barterList[ value ][ i ] + " Name" ];
-                let parentlocalename = this.tables.locales.global.en[ this.tables.templates.items[ barterList[ value ][ i ] ]._parent + " Name" ];
-                barterList[ value ][ i ] = "[" + barterList[ value ][ i ] + "]-[" + localename + "]-[" + parentlocalename + "]";
+                let localeName = this.tables.locales.global.en[ barterList[ value ][ i ] + " Name" ];
+                let parentLocaleName = this.tables.locales.global.en[ this.tables.templates.items[ barterList[ value ][ i ] ]._parent + " Name" ];
+                barterList[ value ][ i ] = "[" + barterList[ value ][ i ] + "]-[" + localeName + "]-[" + parentLocaleName + "]";
             }
         }
     }
@@ -406,8 +406,8 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
 
     private getRandomItemFromTier( tier: number ): number
     {
-        const arrayLenght = this.barterList[ tier ].length;
-        const selected = this.getNumberBetweenZeroAnd( arrayLenght );
+        const arrayLength = this.barterList[ tier ].length;
+        const selected = this.getNumberBetweenZeroAnd( arrayLength );
 
         return selected;
     }
@@ -486,7 +486,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
                 assort.loyal_level_items[ mainID ] = assort.loyal_level_items[ trade._id ]; //Its just an integer,so no need fo structuredCopy
 
             }
-            //It is a barter, but we dont override.  
+            //It is a barter, but we don't override.  
             if ( !this.config.overrideExistingBarters )
             {
                 return;
@@ -671,7 +671,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
 
         for ( const entry of trade )
         {
-            if ( entry._tpl == itemID )
+            if ( entry._tpl === itemID )
             {
                 return true;
             }
@@ -687,7 +687,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
 
         if ( assort.barter_scheme[ trade._id ] === undefined )
         {
-            this.printColor( "Item " + trade._id + " does not have a barter scheme. Defaulting to item value 1.", LogTextColor.RED );
+            this.printColor( `Item ${trade._id} does not have a barter scheme. Defaulting to item value 1.`, LogTextColor.RED );
             return 1;
         }
 
@@ -724,7 +724,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
         }
         for ( const item of traders[ traderID ].assort.items )
         {
-            if ( item.parentId != "hideout" )
+            if ( item.parentId !== "hideout" )
             {
                 continue;
             }
@@ -732,9 +732,9 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
             //check for invalid data
             if ( !itemDB[ item._tpl ] )
             {
-                //Item doesnt exist in the global item database
-                this.printColor( "[Limited Traders] Found trade with item that doesnt exist in the global database. This is most likely caused by a mod doing something wrong.", LogTextColor.RED );
-                this.printColor( "[Limited Traders] Item ID of broken trade is: " + item._tpl, LogTextColor.RED );
+                //Item doesn't exist in the global item database
+                this.printColor( "[Limited Traders] Found trade with item that doesn't exist in the global database. This is most likely caused by a mod doing something wrong.", LogTextColor.RED );
+                this.printColor( `[Limited Traders] Item ID of broken trade is: ${item._tpl}`, LogTextColor.RED );
                 continue;
             }
             else if ( !itemDB[ item._tpl ]._parent )
@@ -768,17 +768,17 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
         this.logger.logWithColor( message, color );
     }
 
-    private debugJsonOutput( jsonObject: any, label: string = "" )
+    private debugJsonOutput<T>(jsonObject: T, label = "")
     {
 
         if ( label.length > 0 )
         {
-            this.logger.logWithColor( "[" + label + "]", LogTextColor.GREEN );
+            this.logger.logWithColor( `[${label}]`, LogTextColor.GREEN );
         }
         this.logger.logWithColor( JSON.stringify( jsonObject, null, 4 ), LogTextColor.MAGENTA );
     }
 
-    private writeResult( prefix: string, data: any, extension: string = ".json", messagePrefix: string = "" ): void
+    private writeResult( prefix: string, data: any, extension = ".json", messagePrefix = "" ): void
     {
         // get formatted text to save
         const text = this.jsonUtil.serialize( data, true );
@@ -786,40 +786,40 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
         // get file name
         const date = this.timeUtil.getDate();
         const time = this.timeUtil.getTime();
-        const fileName = this.outputFolder + prefix + "_" + date + "_" + time + extension;
+        const fileName = `${this.outputFolder + prefix}_${date}_${time}${extension}`;
 
         // save file
         this.vfs.writeFile( fileName, text );
-        this.printColor( messagePrefix + " Written results to: " + fileName, LogTextColor.CYAN );
+        this.printColor( `${messagePrefix} Written results to: ${fileName}`, LogTextColor.CYAN );
     }
 
     private getLoyaltyLevel( assort: ITraderAssort, trade: Item ): number
     {
         if ( !assort.loyal_level_items[ trade._id ] )
         {
-            this.printColor( "Item " + trade._id + " does not have a loyalty level. Defaulting to 1.", LogTextColor.RED );
+            this.printColor( `Item ${trade._id} does not have a loyalty level. Defaulting to 1.`, LogTextColor.RED );
             return 1;
         }
         return assort.loyal_level_items[ trade._id ];
     }
 
-    private writeLogFileLine( line: string, reset: boolean = false )
+    private writeLogFileLine( line: string, reset = false )
     {
         const trader = this.currentLogFile;
         if ( reset )
         {
             this.vfs.writeFile( this.outputFolder + this.currentLogFile, "" )
         }
-        this.vfs.writeFile( this.outputFolder + this.currentLogFile, line + "\n", true )
+        this.vfs.writeFile( this.outputFolder + this.currentLogFile, `${line}\n`, true )
     }
 
     private getLocaleName( ID: string )
     {
-        if ( !this.tables.locales.global[ this.locale ][ ID + " Name" ] )
+        if ( !this.tables.locales.global[ this.locale ][ `${ID} Name` ] )
         {
             return "Unknown";
         }
-        return this.tables.locales.global[ this.locale ][ ID + " Name" ];
+        return this.tables.locales.global[ this.locale ][ `${ID} Name` ];
     }
 }
 
