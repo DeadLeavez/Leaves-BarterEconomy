@@ -56,36 +56,36 @@
         "5734758f24597738025ee253": 10, //Golden Neck chain
         "5c052fb986f7746b2101e909": 10, //UHF RFID Reader
         "590c621186f774138d11ea29": 10, //Flash Drive
+        "5d403f9186f7743cac3f229b": 10, //Whiskey
 
-        "5d1b36a186f7742523398433": 15, //Metal fuel tank
-        "5d1b371186f774253763a656": 15, //Expeditionary fuel tank
-        "62a0a16d0b9d3c46de5b6e97": 15, //Military Flash drive
-        "5d403f9186f7743cac3f229b": 15, //Whiskey
-        "5d03784a86f774203e7e0c4d": 15, //Military Gyrotachometer
-        "5910968f86f77425cf569c32": 15, //Weapon repairkit
-        "5c12613b86f7743bbe2c3f76": 15, //Intelligence Folder
-        "5d0377ce86f774186372f689": 15, //Iridium
-
+        "5d1b36a186f7742523398433": 20, //Metal fuel tank
+        "5d1b371186f774253763a656": 20, //Expeditionary fuel tank
+        "62a0a16d0b9d3c46de5b6e97": 20, //Military Flash drive
+        "5d03784a86f774203e7e0c4d": 20, //Military Gyrotachometer
+        "5910968f86f77425cf569c32": 20, //Weapon repairkit
+        "5d0377ce86f774186372f689": 20, //Iridium
         "59faff1d86f7746c51718c9c": 20, //Physical Bitcoin
-        "5c052f6886f7746b1e3db148": 20, //Military COFDM
-        "591094e086f7747caa7bb2ef": 20, //Body armor repair kit
-        "6389c7750ef44505c87f5996": 20, //Microcontroller Board
         "5af0534a86f7743b6f354284": 20, //Ophtalmoscope
-        "5c052e6986f7746b207bc3c9": 20, //Defibrillator
 
-        "5d1b2f3f86f774252167a52c": 35, //FP 100 filter
+        "5c052f6886f7746b1e3db148": 35, //Military COFDM
+        "5c12613b86f7743bbe2c3f76": 35, //Intelligence Folder
+        "591094e086f7747caa7bb2ef": 35, //Body armor repair kit
+        "5c052e6986f7746b207bc3c9": 35, //Defibrillator
         "5c05300686f7746dce784e5d": 35, //VPX
         "57347ca924597744596b4e71": 35, //Graphics card
-        "6389c85357baa773a825b356": 35, //Advanced Current Converter
-        "6389c7f115805221fb410466": 35, //Far forward GPS signal amplifier unit
-        "5d03775b86f774203e7e0c4b": 35, //Phased array element
-        "5c05308086f7746b2101e90b": 35, //Virtex
 
+        "5d1b2f3f86f774252167a52c": 60, //FP 100 filter
+        "6389c7750ef44505c87f5996": 60, //Microcontroller Board
+        "5c05308086f7746b2101e90b": 60, //Virtex
         "5d03794386f77420415576f5": 60, //Tank battery
-        "5c0530ee86f774697952d952": 60, //Ledx
-        "6389c8c5dbfd5e4b95197e6b": 60, //Blue folder
-        "6389c8fb46b54c634724d847": 60, //Silicon Optoelectronics textbook
-        "6389c92d52123d5dd17f8876": 60 //Advanced Electronics Materials
+        "5d03775b86f774203e7e0c4b": 60, //Phased array element
+
+        "6389c85357baa773a825b356": 90, //Advanced Current Converter
+        "6389c7f115805221fb410466": 90, //Far forward GPS signal amplifier unit
+        "5c0530ee86f774697952d952": 90, //Ledx
+        "6389c8c5dbfd5e4b95197e6b": 90, //Blue folder
+        "6389c8fb46b54c634724d847": 90, //Silicon Optoelectronics textbook
+        "6389c92d52123d5dd17f8876": 90 //Advanced Electronics Materials
     },
 
     "itemBlacklist": //Items that shouldnt appear for trades. Some seem to be quest items that arent correctly tagged.
@@ -128,7 +128,9 @@
         "567143bf4bdc2d1a0f8b4567": 15, //Pistol Case
         "5d235bb686f77443f4331278": 320, //S I C C case
         "59fb042886f7746c5005a7b2": 180, //Item case
-        "5c94bbff86f7747ee735c08f": 20 //Terragroup Labs access keycard
+        "5c94bbff86f7747ee735c08f": 20, //Terragroup Labs access keycard
+        "5c0a840b86f7742ffa4f2482": 1000, //T H I C C ITEM CASE
+        "5b6d9ce188a4501afc1b2b25": 560 //T H I C C WEAPON CASE
     },
 
     "maxNumItems": 10,

@@ -1,34 +1,33 @@
-import { DependencyContainer } from "tsyringe";
-import { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import { IPostDBLoadMod } from "@spt-aki/models/external/IPostDBLoadMod";
-import { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
-import { IPreAkiLoadMod } from "@spt-aki/models/external/IPreAkiLoadMod"
-import { HandbookHelper } from "@spt-aki/helpers/HandbookHelper";
+import type { DependencyContainer } from "tsyringe";
+import type { ILogger } from "@spt-aki/models/spt/utils/ILogger";
+import type { IPostDBLoadMod } from "@spt-aki/models/external/IPostDBLoadMod";
+import type { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
+import type { IPreAkiLoadMod } from "@spt-aki/models/external/IPreAkiLoadMod"
+import type { HandbookHelper } from "@spt-aki/helpers/HandbookHelper";
 
-import { JsonUtil } from "@spt-aki/utils/JsonUtil";
-import { TimeUtil } from "@spt-aki/utils/TimeUtil";
-import { HashUtil } from "@spt-aki/utils/HashUtil";
+import type { JsonUtil } from "@spt-aki/utils/JsonUtil";
+import type { TimeUtil } from "@spt-aki/utils/TimeUtil";
+import type { HashUtil } from "@spt-aki/utils/HashUtil";
 
-import { VFS } from "@spt-aki/utils/VFS";
+import type { VFS } from "@spt-aki/utils/VFS";
 import { jsonc } from "jsonc";
-import * as path from "path";
+import * as path from "node:path";
 import { LogTextColor } from "@spt-aki/models/spt/logging/LogTextColor";
 
-import { PreAkiModLoader } from "@spt-aki/loaders/PreAkiModLoader";
-import { IBarterScheme, ITraderAssort } from "@spt-aki/models/eft/common/tables/ITrader";
-import { Item } from "@spt-aki/models/eft/common/tables/IItem";
-import { IPostAkiLoadMod } from "@spt-aki/models/external/IPostAkiLoadMod";
-import { OnUpdateModService } from "@spt-aki/services/mod/onUpdate/OnUpdateModService";
-import { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
-import { RagfairOfferGenerator } from "@spt-aki/generators/RagfairOfferGenerator";
-import { ItemHelper } from "@spt-aki/helpers/ItemHelper";
+import type { PreAkiModLoader } from "@spt-aki/loaders/PreAkiModLoader";
+import type { IBarterScheme, ITraderAssort } from "@spt-aki/models/eft/common/tables/ITrader";
+import type { Item } from "@spt-aki/models/eft/common/tables/IItem";
+import type { OnUpdateModService } from "@spt-aki/services/mod/onUpdate/OnUpdateModService";
+import type { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
+import type { RagfairOfferGenerator } from "@spt-aki/generators/RagfairOfferGenerator";
+import type { ItemHelper } from "@spt-aki/helpers/ItemHelper";
 
-import { RagfairOfferHolder } from "@spt-aki/utils/RagfairOfferHolder";
-import { IRagfairOffer } from "@spt-aki/models/eft/ragfair/IRagfairOffer";
-import { RagfairOfferService } from "@spt-aki/services/RagfairOfferService";
-import { SaveServer } from "@spt-aki/servers/SaveServer";
-import { IRagfairConfig } from "@spt-aki/models/spt/config/IRagfairConfig";
-import { ConfigServer } from "@spt-aki/servers/ConfigServer";
+import type { RagfairOfferHolder } from "@spt-aki/utils/RagfairOfferHolder";
+import type { IRagfairOffer } from "@spt-aki/models/eft/ragfair/IRagfairOffer";
+import type { RagfairOfferService } from "@spt-aki/services/RagfairOfferService";
+import type { SaveServer } from "@spt-aki/servers/SaveServer";
+import type { IRagfairConfig } from "@spt-aki/models/spt/config/IRagfairConfig";
+import type { ConfigServer } from "@spt-aki/servers/ConfigServer";
 import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
 
 class SeededRandom
@@ -109,7 +108,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
             {
                 return false;
             }
-            let timeNow = this.getTimeNow();
+            const timeNow = this.getTimeNow();
             const traders = this.tables.traders;
             for ( let traderNum = 0; traderNum < this.tradersToUpdate.length; traderNum++ )
             {
@@ -122,12 +121,12 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
                         const time = this.timeUtil.getTime();
                         const dateString: string = `_${ date }_${ time }_`;
                         const nickname = traders[ this.tradersToUpdate[ traderNum ] ].base.nickname;
-                        this.currentLogFile = "trades_" + dateString + nickname + ".txt";
-                        this.writeLogFileLine( "[Updating Trader:" + traders[ this.tradersToUpdate[ traderNum ] ].base.nickname + "]" );
+                        this.currentLogFile = `trades_${dateString}${nickname}.txt`;
+                        this.writeLogFileLine( `[Updating Trader:${traders[ this.tradersToUpdate[ traderNum ] ].base.nickname}]` );
                         this.writeLogFileLine( "-------------------------------------------" );
                     }
 
-                    this.printColor( "[Barter Economy] Updating Trader:" + this.tradersToUpdate[ traderNum ], LogTextColor.BLUE );
+                    this.printColor( `[Barter Economy] Updating Trader:${this.tradersToUpdate[ traderNum ]}`, LogTextColor.BLUE );
 
                     this.modifyTrader( this.tradersToUpdate[ traderNum ] );
 
@@ -178,7 +177,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
         this.locale = this.config.writeLogLocale ? this.config.writeLogLocale : "en";
 
         const preAkiModLoader = container.resolve<PreAkiModLoader>( "PreAkiModLoader" );
-        this.outputFolder = preAkiModLoader.getModPath( "Leaves-BarterEconomy" ) + "output/";
+        this.outputFolder = `${preAkiModLoader.getModPath( "Leaves-BarterEconomy" )}output/`;
         if ( this.config.useSeed )
         {
             this.rng = new SeededRandom( this.config.seed );
@@ -255,20 +254,20 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
 
         //Print all existing traders, so players can see their IDs.
         this.printColor( "[Barter Economy] All traders in the database:", LogTextColor.YELLOW );
-        for ( let traderID in traders )
+        for ( const traderID in traders )
         {
             this.allTraders.push( traderID ); //Add all traders to out list of traders. For use in ragfair.
-            this.printColor( "[Barter Economy] Trader ID: \"" + traderID + "\" - Nickname: " + traders[ traderID ].base.nickname, LogTextColor.YELLOW );
+            this.printColor( `[Barter Economy] Trader ID: \"${traderID}\" - Nickname: ${traders[ traderID ].base.nickname}`, LogTextColor.YELLOW );
         }
         //Let user know that they should load this mod after other traders.
         this.printColor( "[Barter Economy] If you don't see the trader you're looking for.\nmake sure it's loaded BEFORE this mod.", LogTextColor.YELLOW );
 
-        for ( let traderID of traderIDs )
+        for ( const traderID of traderIDs )
         {
             //Check if trader exists
             if ( !traders[ traderID ] )
             {
-                this.printColor( "[Barter Economy] Trader " + traderID + " does not exist in the database.", LogTextColor.RED );
+                this.printColor( `[Barter Economy] Trader ${traderID} does not exist in the database.`, LogTextColor.RED );
                 continue;
             }
 
@@ -290,11 +289,11 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
     {
         //Get all items in the game
         const items = this.db.getTables().templates.items;
-        let barterList = {};
+        const barterList = {};
         for ( const item of Object.values( items ) )
         {
             //If quest item or not an item, we skip it.
-            if ( item._props.QuestItem || item._type != "Item" )
+            if ( item._props.QuestItem || item._type !== "Item" )
             {
                 continue;
             }
@@ -330,7 +329,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
 
         }
 
-        let barterListCopy = structuredClone( barterList );
+        const barterListCopy = structuredClone( barterList );
 
         this.tempConvertToName( barterListCopy );
 
@@ -363,7 +362,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
         let closestTier = 9999;
         for ( const tier of tiers )
         {
-            let tempDistance = Math.abs( currentTier - tier );
+            const tempDistance = Math.abs( currentTier - tier );
             if ( tempDistance < closestDistance )
             {
                 closestDistance = tempDistance;
@@ -375,13 +374,13 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
 
     private tempConvertToName( barterList: any )
     {
-        for ( let value in barterList )
+        for ( const value in barterList )
         {
-            for ( let i in barterList[ value ] )
+            for ( const i in barterList[ value ] )
             {
-                let localeName = this.tables.locales.global.en[ barterList[ value ][ i ] + " Name" ];
-                let parentLocaleName = this.tables.locales.global.en[ this.tables.templates.items[ barterList[ value ][ i ] ]._parent + " Name" ];
-                barterList[ value ][ i ] = "[" + barterList[ value ][ i ] + "]-[" + localeName + "]-[" + parentLocaleName + "]";
+                const localeName = this.tables.locales.global.en[ `${barterList[ value ][ i ]} Name` ];
+                const parentLocaleName = this.tables.locales.global.en[ `${this.tables.templates.items[ barterList[ value ][ i ] ]._parent} Name` ];
+                barterList[ value ][ i ] = `[${barterList[ value ][ i ]}]-[${localeName}]-[${parentLocaleName}]`;
             }
         }
     }
@@ -414,9 +413,9 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
 
     private generateNewItemIds( items: Item[] )
     {
-        let ids = {}; // this is a map / record / dictionary
+        const ids = {}; // this is a map / record / dictionary
 
-        for ( let item of items )
+        for ( const item of items )
         {
             if ( !ids[ item._id ] )
             {
@@ -431,7 +430,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
         {
             // not sure if this actually modifies the reference.
             // you might need a normal for(;;) loop here
-            for ( let item of items )
+            for ( const item of items )
             {
                 // update node id
                 // not sure if debug messages of the server are shown in release mode, test this!
@@ -466,7 +465,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
                 const tradeChildren = this.itemHelper.findAndReturnChildrenByItems( assort.items, trade._id );
 
                 // Make a copy of the item and all it's children
-                let newEntries: Item[] = [];
+                const newEntries: Item[] = [];
                 for ( const node of assort.items )
                 {
                     if ( tradeChildren.includes( node._id ) )
@@ -547,7 +546,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
         }
         for ( const ID of BarterEconomy.moneyIDs )
         {
-            if ( assort.barter_scheme[ trade._id ][ 0 ][ 0 ]._tpl == ID )
+            if ( assort.barter_scheme[ trade._id ][ 0 ][ 0 ]._tpl === ID )
             {
                 return true;
             }
@@ -558,13 +557,13 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
     private generateBarter( value: number, itemID: string, loyaltyLevel: number ): any
     {
         //All the barters of the current trade
-        let barters = [];
+        const barters = [];
 
         let currentTier = 0;
         let valueCredits = 0;
 
         //Check for overrides
-        if ( this.config.tradeValueOverrides[ itemID ] !== undefined )
+        if ( this.config.tradeValueOverrides[ itemID ] )
         {
             valueCredits = this.config.tradeValueOverrides[ itemID ];
         }
@@ -605,7 +604,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
                     currentTier = this.getNextValueTier( currentTier );
                 }
             }
-            let temp = {
+            const temp = {
                 count: 1,
                 _tpl: "5449016a4bdc2d6f028b456f"
             }
@@ -616,8 +615,8 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
                 break;
             }
 
-            let selectedItem: number = 1;
-            let selectedItemID: string = ""
+            let selectedItem = 1;
+            let selectedItemID = ""
 
             let attempts = 0;
             do
@@ -626,7 +625,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
                 {
                     selectedItem = this.getRandomItemFromTier( currentTier );
                     selectedItemID = this.barterList[ currentTier ][ selectedItem ];
-                } while ( selectedItemID == itemID && this.barterList[ currentTier ].length > 1 ); //Make sure there is more than one item on the tier, or we'll be stuck in an infinite loop.
+                } while ( selectedItemID === itemID && this.barterList[ currentTier ].length > 1 ); //Make sure there is more than one item on the tier, or we'll be stuck in an infinite loop.
 
                 attempts++;
             }
@@ -634,6 +633,13 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
 
             temp._tpl = selectedItemID;
             temp.count = Math.max( Math.floor( valueCredits / currentTier ), 1 );
+
+            const maxItems = this.getNumberBetweenZeroAnd( this.config.maxRandomNumItems ) + this.config.maxNumItems;
+            if ( temp.count > maxItems )
+            {
+                temp.count = maxItems;
+            }
+            
             if ( this.writeLogFileLine )
             {
                 let line = "";
@@ -642,12 +648,6 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
                 line += `\titem:${ this.getLocaleName( temp._tpl ) }`;
                 this.writeLogFileLine( line );
             }
-            const maxItems = this.getNumberBetweenZeroAnd( this.config.maxRandomNumItems ) + this.config.maxNumItems;
-            if ( temp.count > maxItems )
-            {
-                temp.count = maxItems;
-            }
-
             //Add the selected item and count to the trade
             barters.push( temp );
 
@@ -685,7 +685,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
     {
         let total = 0;
 
-        if ( assort.barter_scheme[ trade._id ] === undefined )
+        if ( !assort.barter_scheme[ trade._id ] )
         {
             this.printColor( `Item ${trade._id} does not have a barter scheme. Defaulting to item value 1.`, LogTextColor.RED );
             return 1;
@@ -737,11 +737,12 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
                 this.printColor( `[Limited Traders] Item ID of broken trade is: ${item._tpl}`, LogTextColor.RED );
                 continue;
             }
-            else if ( !itemDB[ item._tpl ]._parent )
+            
+            if ( !itemDB[ item._tpl ]._parent )
             {
                 //Item exists but has no parent. 
                 this.printColor( "[Limited Traders] Found trade with item in the global database that has an invalid _parent entry. This is most likely caused by a mod doing something wrong.", LogTextColor.RED );
-                this.printColor( "[Limited Traders] Item ID of broken item is: " + item._tpl, LogTextColor.RED );
+                this.printColor( `[Limited Traders] Item ID of broken item is: ${item._tpl}`, LogTextColor.RED );
                 continue;
             }
 
