@@ -1,9 +1,9 @@
 {
-    "name": "Barter Economy",
+    "name": "barter_economy",
     "version": "1.0.5",
     "main": "src/mod.js",
     "license": "MIT",
-    "author": "Leaves",
+    "author": "leaves",
     "akiVersion": ">= 3.8.0",
     "scripts": {
         "setup": "npm i",
