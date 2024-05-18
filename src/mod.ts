@@ -177,7 +177,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
         this.locale = this.config.writeLogLocale ? this.config.writeLogLocale : "en";
 
         const preAkiModLoader = container.resolve<PreAkiModLoader>( "PreAkiModLoader" );
-        this.outputFolder = `${preAkiModLoader.getModPath( "Leaves-BarterEconomy" )}output/`;
+        this.outputFolder = `${preAkiModLoader.getModPath( "leaves-barter_economy" )}output/`;
         if ( this.config.useSeed )
         {
             this.rng = new SeededRandom( this.config.seed );
