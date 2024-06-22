@@ -58,3 +58,12 @@ Configs from previous versions are NOT compatible. but can be made compatible by
 - Fix Seed not working. 
 
 Configs from 1.0.4 ARE compatible with this release.
+
+## 1.0.6
+
+- Change naming to be proper package.json 
+
+Config files from 1.0.5 ARE compatible with this release.
+
+FOLDER NAME HAS CHANGED!!!
+YOU HAVE TO DELETE THE OLD FOLDER AFTER INSTALLING THIS. REMEMBER TO COPY YOUR CONFIGS OVER.
