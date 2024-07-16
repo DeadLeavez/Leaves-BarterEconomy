@@ -1,34 +1,34 @@
 import type { DependencyContainer } from "tsyringe";
-import type { ILogger } from "@spt-aki/models/spt/utils/ILogger";
-import type { IPostDBLoadMod } from "@spt-aki/models/external/IPostDBLoadMod";
-import type { DatabaseServer } from "@spt-aki/servers/DatabaseServer";
-import type { IPreAkiLoadMod } from "@spt-aki/models/external/IPreAkiLoadMod"
-import type { HandbookHelper } from "@spt-aki/helpers/HandbookHelper";
+import type { ILogger } from "@spt/models/spt/utils/ILogger";
+import type { IPostDBLoadMod } from "@spt/models/external/IPostDBLoadMod";
+import type { DatabaseServer } from "@spt/servers/DatabaseServer";
+import type { IPreSptLoadMod } from "@spt/models/external/IPreSptLoadMod"
+import type { HandbookHelper } from "@spt/helpers/HandbookHelper";
 
-import type { JsonUtil } from "@spt-aki/utils/JsonUtil";
-import type { TimeUtil } from "@spt-aki/utils/TimeUtil";
-import type { HashUtil } from "@spt-aki/utils/HashUtil";
+import type { JsonUtil } from "@spt/utils/JsonUtil";
+import type { TimeUtil } from "@spt/utils/TimeUtil";
+import type { HashUtil } from "@spt/utils/HashUtil";
 
-import type { VFS } from "@spt-aki/utils/VFS";
+import type { VFS } from "@spt/utils/VFS";
 import { jsonc } from "jsonc";
 import * as path from "node:path";
-import { LogTextColor } from "@spt-aki/models/spt/logging/LogTextColor";
+import { LogTextColor } from "@spt/models/spt/logging/LogTextColor";
 
-import type { PreAkiModLoader } from "@spt-aki/loaders/PreAkiModLoader";
-import type { IBarterScheme, ITraderAssort } from "@spt-aki/models/eft/common/tables/ITrader";
-import type { Item } from "@spt-aki/models/eft/common/tables/IItem";
-import type { OnUpdateModService } from "@spt-aki/services/mod/onUpdate/OnUpdateModService";
-import type { IDatabaseTables } from "@spt-aki/models/spt/server/IDatabaseTables";
-import type { RagfairOfferGenerator } from "@spt-aki/generators/RagfairOfferGenerator";
-import type { ItemHelper } from "@spt-aki/helpers/ItemHelper";
+import type { PreSptModLoader } from "@spt/loaders/PreSptModLoader";
+import type { IBarterScheme, ITraderAssort } from "@spt/models/eft/common/tables/ITrader";
+import type { Item } from "@spt/models/eft/common/tables/IItem";
+import type { OnUpdateModService } from "@spt/services/mod/onUpdate/OnUpdateModService";
+import type { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
+import type { RagfairOfferGenerator } from "@spt/generators/RagfairOfferGenerator";
+import type { ItemHelper } from "@spt/helpers/ItemHelper";
 
-import type { RagfairOfferHolder } from "@spt-aki/utils/RagfairOfferHolder";
-import type { IRagfairOffer } from "@spt-aki/models/eft/ragfair/IRagfairOffer";
-import type { RagfairOfferService } from "@spt-aki/services/RagfairOfferService";
-import type { SaveServer } from "@spt-aki/servers/SaveServer";
-import type { IRagfairConfig } from "@spt-aki/models/spt/config/IRagfairConfig";
-import type { ConfigServer } from "@spt-aki/servers/ConfigServer";
-import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
+import type { RagfairOfferHolder } from "@spt/utils/RagfairOfferHolder";
+import type { IRagfairOffer } from "@spt/models/eft/ragfair/IRagfairOffer";
+import type { RagfairOfferService } from "@spt/services/RagfairOfferService";
+import type { SaveServer } from "@spt/servers/SaveServer";
+import type { IRagfairConfig } from "@spt/models/spt/config/IRagfairConfig";
+import type { ConfigServer } from "@spt/servers/ConfigServer";
+import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
 
 class SeededRandom
 {
@@ -58,7 +58,7 @@ class SeededRandom
  * 4. Generate the barter.
 */
 
-class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
+class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
 {
     private logger: ILogger;
     private db: DatabaseServer;
@@ -92,6 +92,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
     private tradersToUpdate: string[];
     private tradersLastUpdate: number[];
     private currentLogFile: string;
+    private firstRunCompleted: boolean;
 
     private static moneyIDs =
         [
@@ -104,6 +105,10 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
     {
         if ( timeSinceLastRun > 30 )
         {
+            if ( this.firstRunCompleted )
+            {
+                return true;
+            }
             if ( !this.setUpCompleted )
             {
                 return false;
@@ -134,7 +139,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
                     this.ragfairOfferGenerator.generateFleaOffersForTrader( this.tradersToUpdate[ traderNum ] );
 
                     this.tradersLastUpdate[ traderNum ] = structuredClone( traders[ this.tradersToUpdate[ traderNum ] ].base.nextResupply );
-
+                    this.firstRunCompleted = true;
                 }
             }
             return true;
@@ -149,7 +154,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
         return Math.round( unixNow / 1000 );
     }
 
-    public preAkiLoad( container: DependencyContainer ): void
+    public preSptLoad( container: DependencyContainer ): void
     {
         // Get the logger from the server container.
         this.logger = container.resolve<ILogger>( "WinstonLogger" );
@@ -176,8 +181,10 @@ class BarterEconomy implements IPostDBLoadMod, IPreAkiLoadMod
 
         this.locale = this.config.writeLogLocale ? this.config.writeLogLocale : "en";
 
-        const preAkiModLoader = container.resolve<PreAkiModLoader>( "PreAkiModLoader" );
-        this.outputFolder = `${preAkiModLoader.getModPath( "leaves-barter_economy" )}output/`;
+        this.firstRunCompleted = false;
+
+        const preSptModLoader = container.resolve<PreSptModLoader>( "PreSptModLoader" );
+        this.outputFolder = `${preSptModLoader.getModPath( "leaves-barter_economy" )}output/`;
         if ( this.config.useSeed )
         {
             this.rng = new SeededRandom( this.config.seed );

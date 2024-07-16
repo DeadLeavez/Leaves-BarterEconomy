@@ -67,3 +67,14 @@ Config files from 1.0.5 ARE compatible with this release.
 
 FOLDER NAME HAS CHANGED!!!
 YOU HAVE TO DELETE THE OLD FOLDER AFTER INSTALLING THIS. REMEMBER TO COPY YOUR CONFIGS OVER.
+
+## 1.1.0
+
+- Update to 3.9.0
+
+Config files ARE compatible.
+Have not balanced any new items that tarkov has added like a few new figures etc. They're still auto-valuated, but if you have good experience with live tarkov rarities and want to help, feel free to msg me.
+
+## 1.1.1
+
+- Probably fix seed. (AGAIN :D)

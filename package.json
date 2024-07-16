@@ -4,7 +4,7 @@
     "main": "src/mod.js",
     "license": "MIT",
     "author": "leaves",
-    "akiVersion": ">= 3.8.0",
+    "sptVersion": ">= 3.9.0",
     "scripts": {
         "setup": "npm i",
         "build": "node ./build.mjs",
