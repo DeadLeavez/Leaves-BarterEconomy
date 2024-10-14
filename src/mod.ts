@@ -16,39 +16,13 @@ import { LogTextColor } from "@spt/models/spt/logging/LogTextColor";
 
 import type { PreSptModLoader } from "@spt/loaders/PreSptModLoader";
 import type { IBarterScheme, ITraderAssort } from "@spt/models/eft/common/tables/ITrader";
-import type { Item } from "@spt/models/eft/common/tables/IItem";
+import type { IItem } from "@spt/models/eft/common/tables/IItem";
 import type { OnUpdateModService } from "@spt/services/mod/onUpdate/OnUpdateModService";
 import type { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
 import type { RagfairOfferGenerator } from "@spt/generators/RagfairOfferGenerator";
 import type { ItemHelper } from "@spt/helpers/ItemHelper";
 
-import type { RagfairOfferHolder } from "@spt/utils/RagfairOfferHolder";
-import type { IRagfairOffer } from "@spt/models/eft/ragfair/IRagfairOffer";
-import type { RagfairOfferService } from "@spt/services/RagfairOfferService";
-import type { SaveServer } from "@spt/servers/SaveServer";
-import type { IRagfairConfig } from "@spt/models/spt/config/IRagfairConfig";
 import type { ConfigServer } from "@spt/servers/ConfigServer";
-import { ConfigTypes } from "@spt/models/enums/ConfigTypes";
-
-class SeededRandom
-{
-    private m: number;
-    private a: number;
-    private s: number;
-
-    constructor( seed: number )
-    {
-        this.m = 2 ** 35 - 31;
-        this.a = 185852;
-        this.s = seed % this.m;
-    }
-
-    random(): number
-    {
-        this.s = this.s * this.a % this.m;
-        return this.s / this.m;
-    }
-}
 
 /***
  * How this should work
@@ -65,22 +39,13 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
     private tables: IDatabaseTables;
     private handbookHelper: HandbookHelper;
     private ragfairOfferGenerator: RagfairOfferGenerator;
-    private ragfairOfferHolder: RagfairOfferHolder;
-    private ragfairOfferService: RagfairOfferService;
     private itemHelper: ItemHelper;
-    private saveServer: SaveServer;
 
     private jsonUtil: JsonUtil;
     private timeUtil: TimeUtil;
     private hashUtil: HashUtil;
     private vfs: VFS;
     private outputFolder: string;
-    private rng: SeededRandom;
-
-    private allProfiles: string[];
-    private allTraders: string[];
-    private configServer: ConfigServer;
-    private ragfairConfig: IRagfairConfig;
 
     //Config
     private config: IConfig;
@@ -92,7 +57,6 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
     private tradersToUpdate: string[];
     private tradersLastUpdate: number[];
     private currentLogFile: string;
-    private firstRunCompleted: boolean;
 
     private static moneyIDs =
         [
@@ -105,10 +69,6 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
     {
         if ( timeSinceLastRun > 30 )
         {
-            if ( this.firstRunCompleted )
-            {
-                return true;
-            }
             if ( !this.setUpCompleted )
             {
                 return false;
@@ -125,13 +85,15 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
                         const date = this.timeUtil.getDate();
                         const time = this.timeUtil.getTime();
                         const dateString: string = `_${ date }_${ time }_`;
+
                         const nickname = traders[ this.tradersToUpdate[ traderNum ] ].base.nickname;
-                        this.currentLogFile = `trades_${dateString}${nickname}.txt`;
-                        this.writeLogFileLine( `[Updating Trader:${traders[ this.tradersToUpdate[ traderNum ] ].base.nickname}]` );
+                        
+                        this.currentLogFile = `trades_${ dateString }${ nickname }.txt`;
+                        this.writeLogFileLine( `[Updating Trader:${ traders[ this.tradersToUpdate[ traderNum ] ].base.nickname }]` );
                         this.writeLogFileLine( "-------------------------------------------" );
                     }
 
-                    this.printColor( `[Barter Economy] Updating Trader:${this.tradersToUpdate[ traderNum ]}`, LogTextColor.BLUE );
+                    this.printColor( `[Barter Economy] Updating Trader:${ this.tradersToUpdate[ traderNum ] }`, LogTextColor.BLUE );
 
                     this.modifyTrader( this.tradersToUpdate[ traderNum ] );
 
@@ -139,7 +101,6 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
                     this.ragfairOfferGenerator.generateFleaOffersForTrader( this.tradersToUpdate[ traderNum ] );
 
                     this.tradersLastUpdate[ traderNum ] = structuredClone( traders[ this.tradersToUpdate[ traderNum ] ].base.nextResupply );
-                    this.firstRunCompleted = true;
                 }
             }
             return true;
@@ -161,14 +122,10 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         // Get database from server.
         this.db = container.resolve<DatabaseServer>( "DatabaseServer" );
         this.handbookHelper = container.resolve<HandbookHelper>( "HandbookHelper" );
-        this.ragfairOfferGenerator = container.resolve<RagfairOfferGenerator>( "RagfairOfferGenerator" );
-        this.ragfairOfferService = container.resolve<RagfairOfferService>( "RagfairOfferService" );
-        this.ragfairOfferHolder = this.ragfairOfferService.ragfairOfferHandler;
-        this.itemHelper = container.resolve<ItemHelper>( "ItemHelper" );
-        this.saveServer = container.resolve<SaveServer>( "SaveServer" );
-        this.configServer = container.resolve<ConfigServer>( "ConfigServer" );
-        this.ragfairConfig = this.configServer.getConfig<IRagfairConfig>( ConfigTypes.RAGFAIR );
 
+        this.ragfairOfferGenerator = container.resolve<RagfairOfferGenerator>( "RagfairOfferGenerator" );
+
+        this.itemHelper = container.resolve<ItemHelper>( "ItemHelper" );
 
         this.jsonUtil = container.resolve<JsonUtil>( "JsonUtil" );
         this.timeUtil = container.resolve<TimeUtil>( "TimeUtil" );
@@ -181,72 +138,15 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
 
         this.locale = this.config.writeLogLocale ? this.config.writeLogLocale : "en";
 
-        this.firstRunCompleted = false;
-
         const preSptModLoader = container.resolve<PreSptModLoader>( "PreSptModLoader" );
-        this.outputFolder = `${preSptModLoader.getModPath( "leaves-barter_economy" )}output/`;
-        if ( this.config.useSeed )
-        {
-            this.rng = new SeededRandom( this.config.seed );
-        }
+        this.outputFolder = `${ preSptModLoader.getModPath( "leaves-barter_economy" ) }output/`;
 
         onUpdateModService.registerOnUpdate(
             "BarterEconomyUpdateTraders",
             ( timeSinceLastRun: number ) => this.updateTraders( timeSinceLastRun, this.logger ),
             () => "BarterEconomyUpdateTraders" // new route name
         )
-
-        //Flea market bartering stuff.
-        this.allTraders = [];
-        if ( this.config.barterizeFleamarket )
-        {
-            this.ragfairConfig.dynamic.offerItemCount = this.config.offersPerItem;
-            onUpdateModService.registerOnUpdate(
-                "BarterEconomyUpdateProfileList",
-                ( timeSinceLastRun: number ) => this.updateProfileList( timeSinceLastRun, this.logger ),
-                () => "BarterEconomyUpdateProfileList" // new route name
-            )
-
-            
-            this.updateProfileList( 31, this.logger );
-            this.ragfairOfferHolder.addOffer = this.addOfferOverride.bind( this ); //Override the method to add barter offers to the ragfair.
-        }
-
     }
-
-    private addOfferOverride( offer: IRagfairOffer )
-    {
-        //this.printColor( "[Barter Economy] - Adding offer to ragfair from user " + offer.user.id, LogTextColor.GREEN );
-        const trader = offer.user.id;
-        const offerId = offer._id;
-        const itemTpl = offer.items[ 0 ]._tpl;
-        if ( !this.allProfiles.includes( trader ) && !this.allTraders.includes( trader ) )
-        {
-            if ( BarterEconomy.moneyIDs.includes( offer.requirements[ 0 ]._tpl ) )
-            {
-                offer.requirements = this.generateBarter( offer.requirementsCost, offer.items[ 0 ]._tpl, offer.loyaltyLevel );
-                //this.printColor( "[Barter Economy] - Generated barter for trader " + trader + " with ID " + offerId, LogTextColor.GREEN );
-            }
-        }
-        this.ragfairOfferHolder.offersById.set( offerId, offer );
-        this.ragfairOfferHolder.addOfferByTrader( trader, offer );
-        this.ragfairOfferHolder.addOfferByTemplates( itemTpl, offer );
-    }
-
-    private updateProfileList( timeSinceLastRun: number, logger: ILogger ): boolean
-    {
-        if ( timeSinceLastRun > 30 )
-        {
-            this.allProfiles = [];
-            for ( const profile in this.saveServer.getProfiles() )
-            {
-                this.allProfiles.push( profile );
-            }
-            return true;
-        }
-        return false;
-    }
-
     public postDBLoad( container: DependencyContainer ): void 
     {
         //Get tables once DB has loaded.
@@ -263,8 +163,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         this.printColor( "[Barter Economy] All traders in the database:", LogTextColor.YELLOW );
         for ( const traderID in traders )
         {
-            this.allTraders.push( traderID ); //Add all traders to out list of traders. For use in ragfair.
-            this.printColor( `[Barter Economy] Trader ID: \"${traderID}\" - Nickname: ${traders[ traderID ].base.nickname}`, LogTextColor.YELLOW );
+            this.printColor( `[Barter Economy] Trader ID: \"${ traderID }\" - Nickname: ${ traders[ traderID ].base.nickname }`, LogTextColor.YELLOW );
         }
         //Let user know that they should load this mod after other traders.
         this.printColor( "[Barter Economy] If you don't see the trader you're looking for.\nmake sure it's loaded BEFORE this mod.", LogTextColor.YELLOW );
@@ -274,7 +173,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
             //Check if trader exists
             if ( !traders[ traderID ] )
             {
-                this.printColor( `[Barter Economy] Trader ${traderID} does not exist in the database.`, LogTextColor.RED );
+                this.printColor( `[Barter Economy] Trader ${ traderID } does not exist in the database.`, LogTextColor.RED );
                 continue;
             }
 
@@ -385,9 +284,10 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         {
             for ( const i in barterList[ value ] )
             {
-                const localeName = this.tables.locales.global.en[ `${barterList[ value ][ i ]} Name` ];
-                const parentLocaleName = this.tables.locales.global.en[ `${this.tables.templates.items[ barterList[ value ][ i ] ]._parent} Name` ];
-                barterList[ value ][ i ] = `[${barterList[ value ][ i ]}]-[${localeName}]-[${parentLocaleName}]`;
+                const localeName = this.tables.locales.global.en[ `${ barterList[ value ][ i ] } Name` ];
+                const parentLocaleName = this.tables.locales.global.en[ `${ this.tables.templates.items[ barterList[ value ][ i ] ]._parent } Name` ];
+                barterList[ value ][ i ] = `[${ barterList[ value ][ i ] }]-[${ localeName }]-[${ parentLocaleName }]`;
+                //barterList[ value ][ i ] = `${ barterList[ value ][ i ] }\", //${ localeName } - ${ parentLocaleName }`;
             }
         }
     }
@@ -418,7 +318,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         return selected;
     }
 
-    private generateNewItemIds( items: Item[] )
+    private generateNewItemIds( items: IItem[] )
     {
         const ids = {}; // this is a map / record / dictionary
 
@@ -457,7 +357,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         }
     }
 
-    private adjustTrade( assort: ITraderAssort, trade: Item )
+    private adjustTrade( assort: ITraderAssort, trade: IItem )
     {
         let value = this.getTradeValue( assort, trade );
         const loyaltyLevel: number = this.getLoyaltyLevel( assort, trade );
@@ -472,7 +372,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
                 const tradeChildren = this.itemHelper.findAndReturnChildrenByItems( assort.items, trade._id );
 
                 // Make a copy of the item and all it's children
-                const newEntries: Item[] = [];
+                const newEntries: IItem[] = [];
                 for ( const node of assort.items )
                 {
                     if ( tradeChildren.includes( node._id ) )
@@ -511,7 +411,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         {
             return;
         }
-        if ( this.config.cashTradeEnabled && this.getNumberBetweenZeroAnd(100)/100 < this.config.cashTradeChance )
+        if ( this.config.cashTradeEnabled && this.getNumberBetweenZeroAnd( 100 ) / 100 < this.config.cashTradeChance )
         {
             value *= this.config.cashTradeMultiplier;
             if ( value < this.config.cashTradeMinValue )
@@ -529,7 +429,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         return;
     }
 
-    private tradeIncludesItems( assort: ITraderAssort, trade: Item, itemIDs: string[] )
+    private tradeIncludesItems( assort: ITraderAssort, trade: IItem, itemIDs: string[] )
     {
         const scheme = assort.barter_scheme[ trade._id ][ 0 ];
         for ( const entry of scheme )
@@ -542,7 +442,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         return false;
     }
 
-    private isMoneyTrade( assort: ITraderAssort, trade: Item ): boolean
+    private isMoneyTrade( assort: ITraderAssort, trade: IItem ): boolean
     {
 
 
@@ -588,7 +488,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
 
         if ( this.config.writeLog )
         {
-            this.writeLogFileLine( `\n\tLoyalty:${ loyaltyLevel } value:${ valueCredits } name:${ this.getLocaleName( itemID ) }` );
+            this.writeLogFileLine( `\n\tLoyalty:${ loyaltyLevel } value:${ valueCredits } name:${ this.getLocaleName( itemID ) } id:${ itemID }` );
         }
 
         currentTier = this.getNextValueTier( valueCredits );
@@ -641,18 +541,20 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
             temp._tpl = selectedItemID;
             temp.count = Math.max( Math.floor( valueCredits / currentTier ), 1 );
 
-            const maxItems = this.getNumberBetweenZeroAnd( this.config.maxRandomNumItems ) + this.config.maxNumItems;
+            //The maximum amount of items of one type required for a trade is maxNumItems +/- 0-maxRandomNumItems
+            const maxItems = ( this.getNumberBetweenZeroAnd( this.config.maxRandomNumItems * 2 ) - this.config.maxRandomNumItems ) + this.config.maxNumItems;
             if ( temp.count > maxItems )
             {
                 temp.count = maxItems;
             }
-            
-            if ( this.writeLogFileLine )
+
+            if ( this.config.writeLog )
             {
                 let line = "";
                 line += `\t\tTier:${ currentTier }`.padEnd( 11 );
                 line += `\t\tcount:${ temp.count }`.padEnd( 11 );
-                line += `\titem:${ this.getLocaleName( temp._tpl ) }`;
+                line += `\titem:${ this.getLocaleName( temp._tpl ) }`.padEnd( 50 );
+                line += `\tid:${ temp._tpl }`
                 this.writeLogFileLine( line );
             }
             //Add the selected item and count to the trade
@@ -688,13 +590,13 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
 
     }
 
-    private getTradeValue( assort: ITraderAssort, trade: Item ): number
+    private getTradeValue( assort: ITraderAssort, trade: IItem ): number
     {
         let total = 0;
 
         if ( !assort.barter_scheme[ trade._id ] )
         {
-            this.printColor( `Item ${trade._id} does not have a barter scheme. Defaulting to item value 1.`, LogTextColor.RED );
+            this.printColor( `Item ${ trade._id } does not have a barter scheme. Defaulting to item value 1.`, LogTextColor.RED );
             return 1;
         }
 
@@ -741,15 +643,15 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
             {
                 //Item doesn't exist in the global item database
                 this.printColor( "[Limited Traders] Found trade with item that doesn't exist in the global database. This is most likely caused by a mod doing something wrong.", LogTextColor.RED );
-                this.printColor( `[Limited Traders] Item ID of broken trade is: ${item._tpl}`, LogTextColor.RED );
+                this.printColor( `[Limited Traders] Item ID of broken trade is: ${ item._tpl }`, LogTextColor.RED );
                 continue;
             }
-            
+
             if ( !itemDB[ item._tpl ]._parent )
             {
                 //Item exists but has no parent. 
                 this.printColor( "[Limited Traders] Found trade with item in the global database that has an invalid _parent entry. This is most likely caused by a mod doing something wrong.", LogTextColor.RED );
-                this.printColor( `[Limited Traders] Item ID of broken item is: ${item._tpl}`, LogTextColor.RED );
+                this.printColor( `[Limited Traders] Item ID of broken item is: ${ item._tpl }`, LogTextColor.RED );
                 continue;
             }
 
@@ -763,11 +665,6 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
 
     private getNumberBetweenZeroAnd( max: number )
     {
-        if ( this.config.useSeed )
-        {
-            return Math.floor( this.rng.random() * max );
-        }
-
         return Math.floor( Math.random() * max );
     }
 
@@ -776,12 +673,12 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         this.logger.logWithColor( message, color );
     }
 
-    private debugJsonOutput<T>(jsonObject: T, label = "")
+    private debugJsonOutput<T>( jsonObject: T, label = "" )
     {
 
         if ( label.length > 0 )
         {
-            this.logger.logWithColor( `[${label}]`, LogTextColor.GREEN );
+            this.logger.logWithColor( `[${ label }]`, LogTextColor.GREEN );
         }
         this.logger.logWithColor( JSON.stringify( jsonObject, null, 4 ), LogTextColor.MAGENTA );
     }
@@ -794,18 +691,18 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         // get file name
         const date = this.timeUtil.getDate();
         const time = this.timeUtil.getTime();
-        const fileName = `${this.outputFolder + prefix}_${date}_${time}${extension}`;
+        const fileName = `${ this.outputFolder + prefix }_${ date }_${ time }${ extension }`;
 
         // save file
         this.vfs.writeFile( fileName, text );
-        this.printColor( `${messagePrefix} Written results to: ${fileName}`, LogTextColor.CYAN );
+        this.printColor( `${ messagePrefix } Written results to: ${ fileName }`, LogTextColor.CYAN );
     }
 
-    private getLoyaltyLevel( assort: ITraderAssort, trade: Item ): number
+    private getLoyaltyLevel( assort: ITraderAssort, trade: IItem ): number
     {
         if ( !assort.loyal_level_items[ trade._id ] )
         {
-            this.printColor( `Item ${trade._id} does not have a loyalty level. Defaulting to 1.`, LogTextColor.RED );
+            this.printColor( `Item ${ trade._id } does not have a loyalty level. Defaulting to 1.`, LogTextColor.RED );
             return 1;
         }
         return assort.loyal_level_items[ trade._id ];
@@ -818,16 +715,16 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         {
             this.vfs.writeFile( this.outputFolder + this.currentLogFile, "" )
         }
-        this.vfs.writeFile( this.outputFolder + this.currentLogFile, `${line}\n`, true )
+        this.vfs.writeFile( this.outputFolder + this.currentLogFile, `${ line }\n`, true )
     }
 
     private getLocaleName( ID: string )
     {
-        if ( !this.tables.locales.global[ this.locale ][ `${ID} Name` ] )
+        if ( !this.tables.locales.global[ this.locale ][ `${ ID } Name` ] )
         {
             return "Unknown";
         }
-        return this.tables.locales.global[ this.locale ][ `${ID} Name` ];
+        return this.tables.locales.global[ this.locale ][ `${ ID } Name` ];
     }
 }
 

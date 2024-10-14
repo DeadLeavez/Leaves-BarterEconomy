@@ -1,12 +1,5 @@
 {
-    "useSeed": false, //IF we're gonna use a seed to randomize the barters. 
-    "seed": 123, //Seed of the PRNG, if you use the same, you'll get the same results as someone else using this mod. 
-    //as long as the have the same modlist (or rather, same trader setup), and the same settings in this mod.
-    //the PRNG generator with seed isnt the most amazing. Just a FYI
-
-    "randomizeAfterUpdates": true, //Randomize the barters just before each trader reset
-    "timeToWaitAfterUpdate": 5000, //Time to wait after a trader update in MS. Recommended to not touch unless you run into issues. //Doesnt do anything right now.
-    "dumpTiersToFile": true, //Puts a dump of the tierlist into \mods\Leaves-BarterEconomy\output\
+    "dumpTiersToFile": true, //Puts a dump of the tier list into \mods\Leaves-BarterEconomy\output\
 
     "tradersToBarter": //Modded traders should work, and has been tested with No;Hurry's kokohekmatyar trader and lotus. 
     [ //This mod will output all installed traders into the server console, so you can easily find the ID of installed traders.
@@ -19,7 +12,7 @@
         "58330581ace78e27b8b10cee" //Skier
     ],
 
-    "barterCategories": //Categories from wich to draw items that YOU give the traders. The mulit is a multiplier how valuable items from that category are considered. 
+    "barterCategories": //Categories from which to draw items that YOU give the traders. The multi is a multiplier how valuable items from that category are considered. 
     {
         "57864bb7245977548b3b66c2": { "multi": 1.5 }, //Tools
         "57864c8c245977548867e7f1": { "multi": 1.5 }, //Medical Supplies
@@ -43,7 +36,7 @@
         "616eb7aea207f41933308f46": { "multi": 1.2 } //Repair Kits
     },
     "tiers": [ 1, 2, 3, 5, 7, 10, 15 ], //Having more tiers will make trades more "fair", but will reduce variance of trades. 
-    "loyaltyMultiplier": [ 0.9, 1.0, 1.1, 1.2 ], //Multipliy the value of items of this loyalty level. Default settings will make early game a bit easier, and late-game a bit harder.
+    "loyaltyMultiplier": [ 0.9, 1.0, 1.1, 1.2 ], //Multiply the value of items of this loyalty level. Default settings will make early game a bit easier, and late-game a bit harder.
     "manualTieredItems": //Force a tier on a specific item. But these will override any multiplier above, and any set tiers above.
     {
         "62a09f32621468534a797acb": 7, //Pevko Beer
@@ -79,6 +72,7 @@
         "5c05308086f7746b2101e90b": 60, //Virtex
         "5d03794386f77420415576f5": 60, //Tank battery
         "5d03775b86f774203e7e0c4b": 60, //Phased array element
+        "66d9f7256916142b3b02276e": 60, //Radar station spare parts - Electronics",
 
         "6389c85357baa773a825b356": 90, //Advanced Current Converter
         "6389c7f115805221fb410466": 90, //Far forward GPS signal amplifier unit
@@ -88,18 +82,59 @@
         "6389c92d52123d5dd17f8876": 90 //Advanced Electronics Materials
     },
 
-    "itemBlacklist": //Items that shouldnt appear for trades. Some seem to be quest items that arent correctly tagged.
+    "itemBlacklist": //Items that shouldn't appear as viable "currency" for trades. Some seem to be quest items that aren't correctly tagged.
     [
         "59f32bb586f774757e1e8442", //BEAR DOGTAG
         "59f32c3b86f77472a31742f0", //USEC DOGTAG
-        "5e99711486f7744bfc4af328", //Sanitar first aid kit (not maked quest for some reason. Well done BSG)
+        "5e99711486f7744bfc4af328", //Sanitar first aid kit (not marked quest for some reason. Well done BSG)
         "6391fcf5744e45201147080f", //Primorsky Ave apartment key
         "5e99735686f7744bfc4af32c", //Sanitar's surgery kit...
         "648c1a965043c4052a4f8505", //Ebudal???
         "5df8a72c86f77412640e2e83", //Tree ornament (Silver)
         "5df8a6a186f77412640e2e80", //Tree ornament (Red)
         "5df8a77486f77412672a1e3f", //Tree ornament (violet)
-        "614451b71e5874611e2c7ae5" //Fake ass vodka. 
+        "614451b71e5874611e2c7ae5", //Fake ass vodka. 
+
+
+        "6662e9aca7e0b43baa3d5f74", //"Item_barter_dogtags_bear_eod"
+        "6662e9f37fa79a6d83730fa0", //"Item_barter_dogtags_usec_eod"
+        "66588bb047fbd536a674240e", //"Locked valuables сrate (Common)"
+        "665886abdaadd1069736c539", //"Unlocked valuables сrate (Common)"
+        "66572bb3ac60f009f270d1df", //"Locked valuables сrate (Rare)"
+        "66573310a1657263d816a139", //"Unlocked valuables сrate (Rare)"
+        "665828f490486915542256c6", //"Locked valuables сrate (Epic)"
+        "665829a6efd94e2d665b14a8", //"Unlocked valuables сrate (Epic)"
+        "66588b6dcb48a73e674b2649", //"Locked weapon сrate (Common)"
+        "665888282c4a1b73af576b77", //"Unlocked weapon сrate (Common)"
+        "66572b3f6a723f7f005a066c", //"Locked weapon сrate (Rare)"
+        "665732e7ac60f009f270d1ef", //"Unlocked weapon сrate (Rare)"
+        "66582889efd94e2d665b14a2", //"Locked weapon сrate (Epic)"
+        "665829424de4820934746ce6", //"Unlocked weapon сrate (Epic)"
+        "66588ba291f6e93c4c06efef", //"Locked supply сrate (Common)"
+        "6658892e6e007c6f33662002", //"Unlocked supply сrate (Common)"
+        "66572b88ac60f009f270d1dc", //"Locked supply сrate (Rare)"
+        "665732f4464c4b4ba4670fa9", //"Unlocked supply сrate (Rare)"
+        "665828c44de4820934746ce4", //"Locked supply сrate (Epic)"
+        "66582972ac60f009f270d2aa", //"Unlocked supply сrate (Epic)"
+        "66588b514de4820934746dc6", //"Locked equipment сrate (Common)"
+        "6658876e146af22739040fad", //"Unlocked equipment сrate (Common)"
+        "66571bf06a723f7f005a0619", //"Locked equipment сrate (Rare)"
+        "665730fa4de4820934746c48", //"Unlocked equipment сrate (Rare)"
+        "6658285190486915542256c4", //"Locked equipment сrate (Epic)"
+        "6658291eefd94e2d665b14a4", //"Unlocked equipment сrate (Epic)"
+        "6389c88b33a719183c7f63b6", //"Ultralink Satellite Internet Station"
+
+        "6662e9cda7e0b43baa3d5f76", //New BEAR dogtag ID?
+        "6662ea05f6259762c56f3189", //New USEC dogtag ID?
+        "5b9b9020e7ef6f5716480215", //"dogtagt" whatever that means
+
+        //no 100% sure. But dont seem to spawn in spt at least.
+        "660bbc98c38b837877075e4a", //Decrypted flash drive - Info",
+        "660bc341c38b837877075e4c", //Documents with decrypted data - Info",
+        "660bbc47c38b837877075e47", //Encrypted flash drive - Info",
+        "6331ba83f2ab4f3f09502983", //Secure Flash drive V2 - Info",
+        "66d9f7e7099cf6adcc07a369", //KOSA UAV electronic jamming device - Electronics",
+        "66d9f8744827a77e870ecaf1" //GARY ZONT portable electronic warfare device - Electronics",
     ],
 
     "traderCategoriesBlacklist":
@@ -110,13 +145,13 @@
         "5448bc234bdc2d3c308b4569" //Magazines
     ],
 
-    "tradeBlacklist": //Trade blacklist. Enter SPECIFC trades here. Find the IDs in the \Aki_Data\Server\database\traders\<id>\assort.json 
+    "tradeBlacklist": //Trade blacklist. Enter SPECIFIC trades here. Find the IDs in the \Aki_Data\Server\database\traders\<id>\assort.json 
     [
 
     ],
 
-    "enableItemBlacklist": true, //Takes a bit of performace unfortunatley. Will NOT replace barters that include the items specified in the blacklist. Will still copy override if enabled.
-    "tradeItemBlacklist":
+    "enableItemBlacklist": true, //Will NOT replace barters that include the items specified in the blacklist. Will still copy override if enabled.
+    "tradeItemBlacklist": //Any trades that have this in them by default will not be replaced.
     [
         "59f32bb586f774757e1e8442", //Dogtag bear
         "59f32c3b86f77472a31742f0" //Dogtag USEC
@@ -133,12 +168,14 @@
         "5b6d9ce188a4501afc1b2b25": 500 //T H I C C WEAPON CASE
     },
 
-    "maxNumItems": 10,
-    "maxRandomNumItems": 5,
+    //The maximum amount of items of one type required for a trade is maxNumItems +/- 0-maxRandomNumItems
+    //Default values then means 4-10
+    "maxNumItems": 7,
+    "maxRandomNumItems": 3,
 
     "valueStep": 15000, //How much rubles each tier is. Tier 1 is < 15000, tier 2 is < 30000 etc.
-    "maxBarterValue": 1619, //Maximum value a trade can have. I recommend putting this at a  prime number. Why? Cus I said so. Fewer divisors
-    "maxsteps": 15, //Any item above this thier is forced to this tier.
+    "maxBarterValue": 1619, //Maximum value a trade can have. I recommend putting this at a prime number. Why? Cus I said so! Fewer divisors
+    "maxsteps": 15, //Any item above this tier is forced to this tier.
 
     /***
     *These two modifiers could be seen as the "difficulty" of the mod. 
@@ -163,15 +200,7 @@
     "cashTradeEnabled": true, //Enable cash trades. These are trades that should be barter trades, but are instead cash trades.
     "cashTradeChance": 0.04, //Chance of a cash trade.
     "cashTradeMinValue": 75000, //Minimum value of a cash trade.
-    "cashTradeMultiplier": 5, //Multiplier of the value of a cash trade.
-
-    "barterizeFleamarket": false, //Barterize the flea market. Will make the flea market a bit more interesting.
-    "offersPerItem": //Total offers per item. Default is 7-30 per item. But this is INCREDIBLY SLOW to generate. I highly recommend not using too many offers per item.
-    //Only applies if barterizeFleamarket is true.
-    { 
-        "min": 2, //Minimum offers per item
-        "max": 4  //Maximum offers per item
-    } 
+    "cashTradeMultiplier": 5 //Multiplier of the value of a cash trade.
     
     //List of available locales: 
     /*
@@ -197,7 +226,7 @@
 
 
 
-/* Unused categories. Feel free to add at your own leisure. 
+/* Unused categories as of 3.8.x Feel free to add at your own leisure. 
 "57bef4c42459772e8d35a53b": { "multi": 1 }, //GearComponents
 "5448e54d4bdc2dcc718b4568": { "multi": 1 }, //Armor
 "5448bf274bdc2dfc2f8b456a": { "multi": 1 }, //Secured Containers

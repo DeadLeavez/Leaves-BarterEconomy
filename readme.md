@@ -78,3 +78,17 @@ Have not balanced any new items that tarkov has added like a few new figures etc
 ## 1.1.1
 
 - Probably fix seed. (AGAIN :D)
+
+## 1.1.2
+
+- Add a TON of items to the blacklist. Including arena crates and such. (Thanks to Agent772 for bringing this up)
+- Improved data dumping output.
+- Improved config descriptions to be more descriptive
+- Drop support for flea-market barterizing
+- Drop support for seed
+
+
+## TODO
+
+- make cash trades run on top of a generated barter list so we can cache it for seeded
+- Add manual override trades
