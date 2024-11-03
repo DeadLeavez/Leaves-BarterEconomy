@@ -128,13 +128,25 @@
         "6662ea05f6259762c56f3189", //New USEC dogtag ID?
         "5b9b9020e7ef6f5716480215", //"dogtagt" whatever that means
 
-        //no 100% sure. But dont seem to spawn in spt at least.
-        "660bbc98c38b837877075e4a", //Decrypted flash drive - Info",
-        "660bc341c38b837877075e4c", //Documents with decrypted data - Info",
-        "660bbc47c38b837877075e47", //Encrypted flash drive - Info",
-        "6331ba83f2ab4f3f09502983", //Secure Flash drive V2 - Info",
-        "66d9f7e7099cf6adcc07a369", //KOSA UAV electronic jamming device - Electronics",
-        "66d9f8744827a77e870ecaf1" //GARY ZONT portable electronic warfare device - Electronics",
+        //Weird stuff
+        "adrenal_debuff",
+        "clotting_debuff",
+        "damage_debuff",
+        "generic_debuff",
+        "performance_debuff",
+        "regen_debuff",
+        "weight_debuff",
+
+        //no 100% sure. But don't seem to spawn in spt at least.
+        "6656560053eaaa7a23349c86", //Lega Medal - Jewelry",
+        "660bbc98c38b837877075e4a", //Decrypted flash drive - Info
+        "660bc341c38b837877075e4c", //Documents with decrypted data - Info
+        "660bbc47c38b837877075e47", //Encrypted flash drive - Info
+        "6331ba83f2ab4f3f09502983", //Secure Flash drive V2 - Info
+        "6638a5474e92f038531e210e", //Mr Kerman's cat hologram - Jewelry
+        "66d9f7e7099cf6adcc07a369", //KOSA UAV electronic jamming device - Electronics
+        "66d9f7256916142b3b02276e", //Radar station spare parts - Electronics",
+        "66d9f8744827a77e870ecaf1" //GARY ZONT portable electronic warfare device - Electronics
     ],
 
     "traderCategoriesBlacklist":
