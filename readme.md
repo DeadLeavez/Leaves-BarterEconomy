@@ -86,6 +86,7 @@ Have not balanced any new items that tarkov has added like a few new figures etc
 - Improved config descriptions to be more descriptive
 - Drop support for flea-market barterizing
 - Drop support for seed
+- Fix slow breakdown of barters due to it iterating on itself each trader reset. Now resets to a backup of original database before each barterization.
 
 
 ## TODO

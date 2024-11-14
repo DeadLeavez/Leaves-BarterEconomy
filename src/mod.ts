@@ -47,6 +47,8 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
     private vfs: VFS;
     private outputFolder: string;
 
+    private originalTraders;
+
     //Config
     private config: IConfig;
     private barterList: any;
@@ -151,6 +153,8 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
     {
         //Get tables once DB has loaded.
         this.tables = this.db.getTables();
+
+        this.originalTraders = structuredClone( this.db.getTables().traders );
 
         this.printColor( "[Barter Economy] - Barter Economy Starting", LogTextColor.GREEN );
 
@@ -631,6 +635,10 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         {
             return;
         }
+
+        //reset to originals
+        this.db.getTables().traders[ traderID ].assort.items = structuredClone( this.originalTraders[ traderID ].assort.items );
+
         for ( const item of traders[ traderID ].assort.items )
         {
             if ( item.parentId !== "hideout" )

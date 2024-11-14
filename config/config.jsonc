@@ -128,6 +128,17 @@
         "6662ea05f6259762c56f3189", //New USEC dogtag ID?
         "5b9b9020e7ef6f5716480215", //"dogtagt" whatever that means
 
+        //VACCINE??? ALSO DISBLE QUEST ITEMS??
+        "6707cc67cc1667e49e0f7232", //Infected blood sample
+        "6707cd70aab679420007e018", //TG-Vi-24 sample
+        "6707cef3571b50abc703b64f", //V.O. signed diary
+        "6707cf827d279daad80fa95f", //Vaccine sample IV
+        "6707d0804e617ec94f0e562f", //TG-Vi-24 lethal vaccine
+        "6707d0bdaab679420007e01a", //TG-Vi-24 true vaccine
+        "6707d13e4e617ec94f0e5631", //Flash drive with special software
+        "6707d1f9571b50abc703b651", //True vaccine recipe
+        "671a406a6d315b526708f103", //Stolen weapon case
+
         //Weird stuff
         "adrenal_debuff",
         "clotting_debuff",
