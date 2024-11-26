@@ -88,7 +88,6 @@ Have not balanced any new items that tarkov has added like a few new figures etc
 - Drop support for seed
 - Fix slow breakdown of barters due to it iterating on itself each trader reset. Now resets to a backup of original database before each barterization.
 
-
 ## TODO
 
 - make cash trades run on top of a generated barter list so we can cache it for seeded
