@@ -49,10 +49,21 @@
         "5447b5fc4bdc2d87278b4567": { "multi": 0.75 }, //AssaultCarbines
         "5447bedf4bdc2d87278b4568": { "multi": 1.00 } //GrenadeLauncher
     },
+
     "tiers": [ 1, 2, 3, 5, 7, 10, 15 ], //Having more tiers will make trades more "fair", but will reduce variance of trades. 
-    "loyaltyMultiplier": [ 0.9, 1.0, 1.1, 1.2 ], //Multiply the value of items of this loyalty level. Default settings will make early game a bit easier, and late-game a bit harder.
+    "loyaltyMultiplier": [ 0.9, 1.0, 1.05, 1.1 ], //Multiply the value of items of this loyalty level. Default settings will make early game a bit easier, and late-game a bit harder.
     "manualTieredItems": //Force a tier on a specific item. But these will override any multiplier above, and any set tiers above.
     {
+
+        "5e8488fa988a8701445df1e4": 2, //CALOK-B hemostatic applicator
+        "5e2aef7986f7746d3f3c33f5": 2, //Repellent
+		"5e2af00086f7746d3f3c33f7": 2, //Smoked Chimney drain cleaner
+        "5a2a57cfc4a2826c6e06d44a": 2, //RDG-2B smoke grenade
+        "5734781f24597737e04bf32a": 2, //DVD drive
+        "5d40412b86f7743cb332ac3a": 2, //Schaman shampoo
+
+        "590c639286f774151567fa95": 5, //Tech Manual
+
         "62a09f32621468534a797acb": 7, //Pevko Beer
         "5d0376a486f7747d8050965c": 7, //Military Circuit Board
         "60391a8b3364dc22b04d0ce5": 7, //Thermite
@@ -109,7 +120,6 @@
         "5df8a77486f77412672a1e3f", //Tree ornament (violet)
         "614451b71e5874611e2c7ae5", //Fake ass vodka. 
 
-
         "6662e9aca7e0b43baa3d5f74", //"Item_barter_dogtags_bear_eod"
         "6662e9f37fa79a6d83730fa0", //"Item_barter_dogtags_usec_eod"
         "66588bb047fbd536a674240e", //"Locked valuables сrate (Common)"
@@ -161,6 +171,12 @@
         "performance_debuff",
         "regen_debuff",
         "weight_debuff",
+
+        //More cases?
+        "[67408903268737ef6908d432", //Contraband box]
+		"[67409848d0b2f8eb9b034db9", //Sealed box
+		"[6740987b89d5e1ddc603f4f0", //Locked case
+        "[67449b6c89d5e1ddc603f504", //Case key
 
         //not 100% sure. But don't seem to spawn in spt at least.
         "6656560053eaaa7a23349c86", //Lega Medal - Jewelry",

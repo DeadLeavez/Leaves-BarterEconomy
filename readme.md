@@ -93,6 +93,8 @@ Have not balanced any new items that tarkov has added like a few new figures etc
 
 - Fix weapons and armors value calculations. It didn't take into account all armors/weapons child items like attachments and plates. This results in weapons and armor being more expensive in general.
 - Added a field in the config to adjust the calculated costs of different item types. By default it only includes weapons for now, but any parent type can be used.
+- Manually tiered a few items that weren't valued properly.
+- Added a few more borked items to the blacklist.
 
 ## TODO
 
