@@ -7,6 +7,7 @@ interface IConfig
     dumpTiersToFile: boolean;
     tradersToBarter: string[];
     barterCategories: BarterCategories;
+    valueMultipliers: ValueMultipliers;
     tiers: number[];
     loyaltyMultiplier: number[];
     manualTieredItems: ManualTieredItems;
@@ -55,6 +56,10 @@ interface ManualTieredItems
 }
 
 interface BarterCategories
+{
+}
+
+interface ValueMultipliers
 {
 }
 

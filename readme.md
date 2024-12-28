@@ -81,12 +81,18 @@ Have not balanced any new items that tarkov has added like a few new figures etc
 
 ## 1.1.2
 
+- 3.10.0 release
 - Add a TON of items to the blacklist. Including arena crates and such. (Thanks to Agent772 for bringing this up)
 - Improved data dumping output.
 - Improved config descriptions to be more descriptive
 - Drop support for flea-market barterizing
 - Drop support for seed
 - Fix slow breakdown of barters due to it iterating on itself each trader reset. Now resets to a backup of original database before each barterization.
+
+## 1.1.3
+
+- Fix weapons and armors value calculations. It didn't take into account all armors/weapons child items like attachments and plates. This results in weapons and armor being more expensive in general.
+- Added a field in the config to adjust the calculated costs of different item types. By default it only includes weapons for now, but any parent type can be used.
 
 ## TODO
 

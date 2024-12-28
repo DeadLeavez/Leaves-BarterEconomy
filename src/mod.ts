@@ -89,7 +89,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
                         const dateString: string = `_${ date }_${ time }_`;
 
                         const nickname = traders[ this.tradersToUpdate[ traderNum ] ].base.nickname;
-                        
+
                         this.currentLogFile = `trades_${ dateString }${ nickname }.txt`;
                         this.writeLogFileLine( `[Updating Trader:${ traders[ this.tradersToUpdate[ traderNum ] ].base.nickname }]` );
                         this.writeLogFileLine( "-------------------------------------------" );
@@ -609,11 +609,20 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
             total += ( this.getItemValue( barter._tpl ) * barter.count );
         }
 
+        //Gather the total cost of the item plus any child objects
+        let items = [ trade ];
+        items.push( ...this.itemHelper.findAndReturnChildrenByAssort( trade._id, assort.items ) );
+
         //Check if this is lower than the item value, if so. We use that instead.
-        const itemValue = this.getItemValue( trade._tpl );
-        if ( total < itemValue )
+        const itemValue = this.handbookHelper.getTemplatePriceForItems( items );
+        if ( itemValue > total )
         {
             total = itemValue;
+        }
+
+        if ( this.config.valueMultipliers[ this.db.getTables().templates.items[ trade._tpl ]._parent ] )
+        {
+            total *= this.config.valueMultipliers[ this.db.getTables().templates.items[ trade._tpl ]._parent ].multi;
         }
 
         //Check if the item is above that setting.

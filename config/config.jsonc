@@ -17,23 +17,37 @@
         "57864bb7245977548b3b66c2": { "multi": 1.5 }, //Tools
         "57864c8c245977548867e7f1": { "multi": 1.5 }, //Medical Supplies
         "57864e4c24597754843f8723": { "multi": 1.2 }, //Flammable materials (Lubricant)
-        "57864a3d24597754843f8721": { "multi": 2 }, //Jewelry
+        "57864a3d24597754843f8721": { "multi": 2.0 }, //Jewelry
         "57864c322459775490116fbf": { "multi": 1.5 }, //HouseholdGoods
         "57864a66245977548f04a81f": { "multi": 1.5 }, //Electronics
         "57864ada245977548638de91": { "multi": 1.3 }, //BuildingMaterial
         "57864ee62459775490116fc1": { "multi": 1.2 }, //Battery
-        "5d650c3e815116009f6201d2": { "multi": 2 }, //Fuel
+        "5d650c3e815116009f6201d2": { "multi": 2.0 }, //Fuel
         "590c745b86f7743cc433c5f2": { "multi": 3.5 }, //Other
         "5645bcb74bdc2ded0b8b4578": { "multi": 1.5 }, //Headset
         "543be6564bdc2df4348b4568": { "multi": 1.5 }, //Throwable
-        "5448e8d04bdc2ddf718b4569": { "multi": 2 }, //Food
-        "5448e8d64bdc2dce718b4568": { "multi": 2 }, //Drinks
+        "5448e8d04bdc2ddf718b4569": { "multi": 2.0 }, //Food
+        "5448e8d64bdc2dce718b4568": { "multi": 2.0 }, //Drinks
         "5448f3a64bdc2d60728b456a": { "multi": 2.5 }, //Stimulator
         "5448f3ac4bdc2dce718b4569": { "multi": 1.5 }, //Injury Treatments
         "5448f39d4bdc2d0a728b4568": { "multi": 1.5 }, //Medkit
         "5448f3a14bdc2d27728b4569": { "multi": 1.5 }, //Drugs
-        "5448ecbe4bdc2d60728b4568": { "multi": 0.85 }, //Info items
+        "5448ecbe4bdc2d60728b4568": { "multi": 1.0 }, //Info items
         "616eb7aea207f41933308f46": { "multi": 1.2 } //Repair Kits
+    },
+
+    "valueMultipliers": //Adjusts the value of parent types of items that the vendors SELL. Guns are mostly too expensive, so I reduced some of their prices.
+    {
+        "5447bed64bdc2d97278b4568": { "multi": 0.75 }, //Machine Guns
+        "5447b6254bdc2dc3278b4568": { "multi": 1.00 }, //SnipersRifles
+        "5447b5e04bdc2d62278b4567": { "multi": 0.75 }, //Smgs
+        "5447b6094bdc2dc3278b4567": { "multi": 0.75 }, //Shotguns
+        "5447b5cf4bdc2d65278b4567": { "multi": 1.00 }, //Pistol
+        "617f1ef5e8b54b0998387733": { "multi": 1.00 }, //Revolver
+        "5447b6194bdc2d67278b4567": { "multi": 0.75 }, //MarksmanRifles
+        "5447b5f14bdc2d61278b4567": { "multi": 0.75 }, //AssaultRifles
+        "5447b5fc4bdc2d87278b4567": { "multi": 0.75 }, //AssaultCarbines
+        "5447bedf4bdc2d87278b4568": { "multi": 1.00 } //GrenadeLauncher
     },
     "tiers": [ 1, 2, 3, 5, 7, 10, 15 ], //Having more tiers will make trades more "fair", but will reduce variance of trades. 
     "loyaltyMultiplier": [ 0.9, 1.0, 1.1, 1.2 ], //Multiply the value of items of this loyalty level. Default settings will make early game a bit easier, and late-game a bit harder.
@@ -148,7 +162,7 @@
         "regen_debuff",
         "weight_debuff",
 
-        //no 100% sure. But don't seem to spawn in spt at least.
+        //not 100% sure. But don't seem to spawn in spt at least.
         "6656560053eaaa7a23349c86", //Lega Medal - Jewelry",
         "660bbc98c38b837877075e4a", //Decrypted flash drive - Info
         "660bc341c38b837877075e4c", //Documents with decrypted data - Info
@@ -224,7 +238,7 @@
     "cashTradeChance": 0.04, //Chance of a cash trade.
     "cashTradeMinValue": 75000, //Minimum value of a cash trade.
     "cashTradeMultiplier": 5 //Multiplier of the value of a cash trade.
-    
+
     //List of available locales: 
     /*
     "ch": "Chinese",
