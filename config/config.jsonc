@@ -62,6 +62,8 @@
         "5734781f24597737e04bf32a": 2, //DVD drive
         "5d40412b86f7743cb332ac3a": 2, //Schaman shampoo
 
+        "57347c2e24597744902c94a1": 3, //Power supply unity
+
         "590c639286f774151567fa95": 5, //Tech Manual
 
         "62a09f32621468534a797acb": 7, //Pevko Beer
@@ -72,9 +74,10 @@
 
         "5d40407c86f774318526545a": 10, //Vodka
         "5734758f24597738025ee253": 10, //Golden Neck chain
-        "5c052fb986f7746b2101e909": 10, //UHF RFID Reader
         "590c621186f774138d11ea29": 10, //Flash Drive
         "5d403f9186f7743cac3f229b": 10, //Whiskey
+        
+        "5c052fb986f7746b2101e909": 15, //UHF RFID Reader
 
         "5d1b36a186f7742523398433": 20, //Metal fuel tank
         "5d1b371186f774253763a656": 20, //Expeditionary fuel tank
@@ -225,6 +228,7 @@
     //Default values then means 4-10
     "maxNumItems": 7,
     "maxRandomNumItems": 3,
+    "maxDifferentItems": 5, //Maximum number of different items for one trade. Would not recommend touching this, as adjusting it in either direction creates significantly worse barter outcomes. But added because I was asked to. Enjoy.
 
     "valueStep": 15000, //How much rubles each tier is. Tier 1 is < 15000, tier 2 is < 30000 etc.
     "maxBarterValue": 1619, //Maximum value a trade can have. I recommend putting this at a prime number. Why? Cus I said so! Fewer divisors

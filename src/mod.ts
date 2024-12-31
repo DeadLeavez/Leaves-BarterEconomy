@@ -565,7 +565,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
             barters.push( temp );
 
             valueCredits -= currentTier * temp.count;
-            if ( valueCredits <= 0 || count > 5 )
+            if ( valueCredits <= 0 || count > this.config.maxDifferentItems )
             {
                 break;
             }

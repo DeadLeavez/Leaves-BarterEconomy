@@ -95,6 +95,7 @@ Have not balanced any new items that tarkov has added like a few new figures etc
 - Added a field in the config to adjust the calculated costs of different item types. By default it only includes weapons for now, but any parent type can be used.
 - Manually tiered a few items that weren't valued properly.
 - Added a few more borked items to the blacklist.
+- Added the option to adjust maximum different items for a trade. Enjoy.
 
 ## TODO
 
