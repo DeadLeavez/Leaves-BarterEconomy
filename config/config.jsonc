@@ -201,9 +201,17 @@
         "5448bc234bdc2d3c308b4569" //Magazines
     ],
 
-    "tradeBlacklist": //Trade blacklist. Enter SPECIFIC trades here. Find the IDs in the \Aki_Data\Server\database\traders\<id>\assort.json 
+    "tradeBlacklist": //Trade blacklist. Enter SPECIFIC trades here. Find the IDs in the \Spt_Data\Server\database\traders\<id>\assort.json 
     [
 
+    ],
+
+    "specificItemBlacklist":[
+         "661cb36922c9e10dc2d9514b", //Golden_Key_Pouch:
+         "661cb36f5441dc730e28bcb0", //Golden_Keycard_Case:
+         "661cb372e5eb56290da76c3e", //Golden_Keychain1:
+         "661cb3743bf00d3d145518b3", //Golden_Keychain2:
+         "661cb376b16226f648eb0cdc"  //Golden_Keychain3:
     ],
 
     "enableItemBlacklist": true, //Will NOT replace barters that include the items specified in the blacklist. Will still copy override if enabled.
@@ -257,7 +265,9 @@
     "cashTradeEnabled": true, //Enable cash trades. These are trades that should be barter trades, but are instead cash trades.
     "cashTradeChance": 0.04, //Chance of a cash trade.
     "cashTradeMinValue": 75000, //Minimum value of a cash trade.
-    "cashTradeMultiplier": 5 //Multiplier of the value of a cash trade.
+    "cashTradeMultiplier": 5, //Multiplier of the value of a cash trade.
+
+    "saveloadBarters": false //Saves and loads barters from file. If there is no file, it will save after the first run. Think of this as "fixed seed" perhaps.
 
     //List of available locales: 
     /*

@@ -97,6 +97,13 @@ Have not balanced any new items that tarkov has added like a few new figures etc
 - Added a few more borked items to the blacklist.
 - Added the option to adjust maximum different items for a trade. Enjoy.
 
+## 1.1.4
+
+- Added a blacklist for specific items that traders might sell. And populated it with gilded key storage IDs.
+- Added a save/load feature for the barters. This is to replace the old "seed" feature. Will save the list of barters on first run (after enabling) and then load those barters in the future. Default off
+
+OLD CONFIGs are NOT compatible
+
 ## TODO
 
 - make cash trades run on top of a generated barter list so we can cache it for seeded

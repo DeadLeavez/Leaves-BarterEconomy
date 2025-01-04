@@ -38,6 +38,8 @@ interface IConfig
     cashTradeMultiplier: number;
     barterizeFleamarket: boolean;
     offersPerItem: OffersPerItem;
+    specificItemBlacklist: string[];
+    saveloadBarters: boolean;
 }
 
 interface OffersPerItem
