@@ -104,7 +104,10 @@ Have not balanced any new items that tarkov has added like a few new figures etc
 
 OLD CONFIGs are NOT compatible
 
-## TODO
+## 1.1.5
+- Updated blacklist
+- Made the update message in server console mention trader nickname as well as their ID. (Previously only showed ID)
+- Adjusted trade value of a lot of items.
+- Made cash-trades use a set currency from the config. By default used to make peacekeeper and skier use USD and EUR respectively.
 
-- make cash trades run on top of a generated barter list so we can cache it for seeded
-- Add manual override trades
+OLD CONFIGS are NOT compatible

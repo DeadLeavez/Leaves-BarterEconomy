@@ -62,9 +62,9 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
 
     private static moneyIDs =
         [
-            "5449016a4bdc2d6f028b456f",
-            "569668774bdc2da2298b4568",
-            "5696686a4bdc2da3298b456a"
+            "5449016a4bdc2d6f028b456f", //rubles
+            "569668774bdc2da2298b4568", //euros
+            "5696686a4bdc2da3298b456a"  //dollars
         ];
     private modFolder: string;
     private savedBarters: any;
@@ -97,7 +97,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
                         this.writeLogFileLine( "-------------------------------------------" );
                     }
 
-                    this.printColor( `[Barter Economy] Updating Trader:${ this.tradersToUpdate[ traderNum ] }`, LogTextColor.BLUE );
+                    this.printColor( `[Barter Economy] Updating Trader:[${ traders[ this.tradersToUpdate[ traderNum ] ].base.nickname }]-[${ this.tradersToUpdate[ traderNum ] }]`, LogTextColor.BLUE );
 
                     this.modifyTrader( this.tradersToUpdate[ traderNum ] );
 
@@ -379,7 +379,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         }
     }
 
-    private adjustTrade( assort: ITraderAssort, trade: IItem )
+    private adjustTrade( assort: ITraderAssort, trade: IItem, traderID:string )
     {
         let value = this.getTradeValue( assort, trade );
         const loyaltyLevel: number = this.getLoyaltyLevel( assort, trade );
@@ -440,9 +440,18 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
             {
                 value = this.config.cashTradeMinValue;
             }
+
+            let currencyType = "5449016a4bdc2d6f028b456f"; //Default rubles
+            if ( this.config.cashTradeCurrency[ traderID ] )
+            {
+                currencyType = this.config.cashTradeCurrency[ traderID ];
+                let currencyTypeValue = this.handbookHelper.getTemplatePrice( currencyType );
+                value = Math.ceil( value / currencyTypeValue );
+            }
+
             const scheme: IBarterScheme = {
                 count: value,
-                _tpl: "5449016a4bdc2d6f028b456f"
+                _tpl: currencyType
             };
             assort.barter_scheme[ trade._id ][ 0 ] = [ scheme ];
             return;
@@ -710,7 +719,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
             {
                 continue;
             }
-            this.adjustTrade( traders[ traderID ].assort, item );
+            this.adjustTrade( traders[ traderID ].assort, item, traderID );
         }
 
         if ( this.config.saveloadBarters )

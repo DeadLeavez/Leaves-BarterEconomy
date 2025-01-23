@@ -36,6 +36,7 @@ interface IConfig
     cashTradeChance: number;
     cashTradeMinValue: number;
     cashTradeMultiplier: number;
+    cashTradeCurrency: any;
     barterizeFleamarket: boolean;
     offersPerItem: OffersPerItem;
     specificItemBlacklist: string[];
@@ -47,6 +48,8 @@ interface OffersPerItem
     min: number;
     max: number;
 }
+
+
 
 interface TradeValueOverrides
 {
