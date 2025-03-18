@@ -9,7 +9,7 @@ import type { JsonUtil } from "@spt/utils/JsonUtil";
 import type { TimeUtil } from "@spt/utils/TimeUtil";
 import type { HashUtil } from "@spt/utils/HashUtil";
 
-import type { VFS } from "@spt/utils/VFS";
+import { VFS } from "./deps/VFS";
 import { jsonc } from "jsonc";
 import * as path from "node:path";
 import { LogTextColor } from "@spt/models/spt/logging/LogTextColor";
@@ -99,7 +99,11 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
 
                     this.printColor( `[Barter Economy] Updating Trader:[${ traders[ this.tradersToUpdate[ traderNum ] ].base.nickname }]-[${ this.tradersToUpdate[ traderNum ] }]`, LogTextColor.BLUE );
 
+                    const start = performance.now();
                     this.modifyTrader( this.tradersToUpdate[ traderNum ] );
+                    const end = performance.now();
+                    const result = end - start;
+                    this.printColor( "This took:" + result.toString() + " ms" );
 
                     //Update ragfair (flea market) 
                     this.ragfairOfferGenerator.generateFleaOffersForTrader( this.tradersToUpdate[ traderNum ] );
@@ -134,7 +138,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         this.jsonUtil = container.resolve<JsonUtil>( "JsonUtil" );
         this.timeUtil = container.resolve<TimeUtil>( "TimeUtil" );
         this.hashUtil = container.resolve<HashUtil>( "HashUtil" );
-        this.vfs = container.resolve<VFS>( "VFS" );
+        this.vfs = new VFS();
         const onUpdateModService = container.resolve<OnUpdateModService>( "OnUpdateModService" );
 
         const configFile = path.resolve( __dirname, "../config/config.jsonc" );
@@ -379,7 +383,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         }
     }
 
-    private adjustTrade( assort: ITraderAssort, trade: IItem, traderID:string )
+    private adjustTrade( assort: ITraderAssort, trade: IItem, traderID: string )
     {
         let value = this.getTradeValue( assort, trade );
         const loyaltyLevel: number = this.getLoyaltyLevel( assort, trade );
@@ -475,7 +479,12 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
 
     private isMoneyTrade( assort: ITraderAssort, trade: IItem ): boolean
     {
-
+        if ( !assort.barter_scheme.hasOwnProperty( trade._id ) || !assort.barter_scheme[ trade._id ].hasOwnProperty( 0 ) )
+        {
+            //Trade is weird
+            this.printColor( "[Barter Economy] Somethings gone real wrong. Trying to access a missing barter scheme?", LogTextColor.RED );
+            this.printColor( `[Barter Economy] Item ID of broken trade is: ${ trade._tpl } TradeID: ${ trade._id }`, LogTextColor.RED );
+        }
 
         //There are no trades that are bigger than one item that is a money trade.
         if ( assort.barter_scheme[ trade._id ][ 0 ].length > 1 )
@@ -697,7 +706,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
             {
                 //Item doesn't exist in the global item database
                 this.printColor( "[Barter Economy] Found trade with item that doesn't exist in the global database. This is most likely caused by a mod doing something wrong.", LogTextColor.RED );
-                this.printColor( `[Barter Economy] Item ID of broken trade is: ${ item._tpl }`, LogTextColor.RED );
+                this.printColor( `[Barter Economy] Item ID of broken trade is: ${ item._tpl } TradeID: ${ item._id }`, LogTextColor.RED );
                 continue;
             }
 
@@ -705,7 +714,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
             {
                 //Item exists but has no parent. 
                 this.printColor( "[Barter Economy] Found trade with item in the global database that has an invalid _parent entry. This is most likely caused by a mod doing something wrong.", LogTextColor.RED );
-                this.printColor( `[Barter Economy] Item ID of broken item is: ${ item._tpl }`, LogTextColor.RED );
+                this.printColor( `[Barter Economy] Item ID of broken item is: ${ item._tpl } TradeID: ${ item._id }`, LogTextColor.RED );
                 continue;
             }
 

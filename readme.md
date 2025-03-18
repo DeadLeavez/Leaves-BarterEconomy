@@ -111,3 +111,6 @@ OLD CONFIGs are NOT compatible
 - Made cash-trades use a set currency from the config. By default used to make peacekeeper and skier use USD and EUR respectively.
 
 OLD CONFIGS are NOT compatible
+
+## 1.1.6
+- Updated compat to 3.11 (still works on 3.10)
