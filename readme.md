@@ -113,4 +113,7 @@ OLD CONFIGs are NOT compatible
 OLD CONFIGS are NOT compatible
 
 ## 1.1.6
-- Updated compat to 3.11 (still works on 3.10)
+- Updated compat to 3.11 (this release still works on 3.10)
+
+## 1.1.7
+- Updated blacklist

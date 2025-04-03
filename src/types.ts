@@ -10,8 +10,6 @@ interface IConfig
     valueMultipliers: ValueMultipliers;
     tiers: number[];
     loyaltyMultiplier: number[];
-    manualTieredItems: ManualTieredItems;
-    itemBlacklist: string[];
     traderCategoriesBlacklist: string[];
     tradeBlacklist: any[];
     enableItemBlacklist: boolean;
@@ -19,6 +17,7 @@ interface IConfig
     tradeValueOverrides: TradeValueOverrides;
     maxNumItems: number;
     maxRandomNumItems: number;
+    maxDifferentItems: number;
     valueStep: number;
     maxBarterValue: number;
     maxsteps: number;

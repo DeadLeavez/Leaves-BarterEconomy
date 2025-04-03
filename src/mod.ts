@@ -9,9 +9,6 @@ import type { JsonUtil } from "@spt/utils/JsonUtil";
 import type { TimeUtil } from "@spt/utils/TimeUtil";
 import type { HashUtil } from "@spt/utils/HashUtil";
 
-import { VFS } from "./deps/VFS";
-import { jsonc } from "jsonc";
-import * as path from "node:path";
 import { LogTextColor } from "@spt/models/spt/logging/LogTextColor";
 
 import type { PreSptModLoader } from "@spt/loaders/PreSptModLoader";
@@ -22,7 +19,7 @@ import type { IDatabaseTables } from "@spt/models/spt/server/IDatabaseTables";
 import type { RagfairOfferGenerator } from "@spt/generators/RagfairOfferGenerator";
 import type { ItemHelper } from "@spt/helpers/ItemHelper";
 
-import type { ConfigServer } from "@spt/servers/ConfigServer";
+import { LeavesUtils } from "./deps/LeavesUtils";
 
 /***
  * How this should work
@@ -44,13 +41,15 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
     private jsonUtil: JsonUtil;
     private timeUtil: TimeUtil;
     private hashUtil: HashUtil;
-    private vfs: VFS;
     private outputFolder: string;
 
     private originalTraders;
+    private leavesUtils: LeavesUtils;
 
     //Config
     private config: IConfig;
+    private itemBlacklist: string[];
+    private manualTieredItems: Record<string, number>[];
     private barterList: any;
     private locale: string;
 
@@ -66,10 +65,9 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
             "569668774bdc2da2298b4568", //euros
             "5696686a4bdc2da3298b456a"  //dollars
         ];
-    private modFolder: string;
     private savedBarters: any;
 
-    private updateTraders( timeSinceLastRun: number, logger: ILogger ): boolean
+    private updateTraders( timeSinceLastRun: number ): boolean
     {
         if ( timeSinceLastRun > 30 )
         {
@@ -97,13 +95,13 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
                         this.writeLogFileLine( "-------------------------------------------" );
                     }
 
-                    this.printColor( `[Barter Economy] Updating Trader:[${ traders[ this.tradersToUpdate[ traderNum ] ].base.nickname }]-[${ this.tradersToUpdate[ traderNum ] }]`, LogTextColor.BLUE );
+                    this.leavesUtils.printColor( `[Barter Economy] Updating Trader:[${ traders[ this.tradersToUpdate[ traderNum ] ].base.nickname }]-[${ this.tradersToUpdate[ traderNum ] }]`, LogTextColor.BLUE );
 
                     const start = performance.now();
                     this.modifyTrader( this.tradersToUpdate[ traderNum ] );
                     const end = performance.now();
                     const result = end - start;
-                    this.printColor( "This took:" + result.toString() + " ms" );
+                    this.leavesUtils.printColor( "This took:" + result.toString() + " ms" );
 
                     //Update ragfair (flea market) 
                     this.ragfairOfferGenerator.generateFleaOffersForTrader( this.tradersToUpdate[ traderNum ] );
@@ -135,25 +133,25 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
 
         this.itemHelper = container.resolve<ItemHelper>( "ItemHelper" );
 
+        const preSptModLoader = container.resolve<PreSptModLoader>( "PreSptModLoader" );
         this.jsonUtil = container.resolve<JsonUtil>( "JsonUtil" );
         this.timeUtil = container.resolve<TimeUtil>( "TimeUtil" );
         this.hashUtil = container.resolve<HashUtil>( "HashUtil" );
-        this.vfs = new VFS();
         const onUpdateModService = container.resolve<OnUpdateModService>( "OnUpdateModService" );
 
-        const configFile = path.resolve( __dirname, "../config/config.jsonc" );
-        this.config = jsonc.parse( this.vfs.readFile( configFile ) );
+        this.leavesUtils = new LeavesUtils( container );
+        this.leavesUtils.setModFolder( `${ preSptModLoader.getModPath( "leaves-barter_economy" ) }/` );
+        this.config = this.leavesUtils.loadFile( "config/config.jsonc" );
+        this.itemBlacklist = this.leavesUtils.loadFile( "config/itemBlacklist.jsonc" );
+        this.manualTieredItems = this.leavesUtils.loadFile( "config/manualTieredItems.jsonc" );
 
         this.locale = this.config.writeLogLocale ? this.config.writeLogLocale : "en";
 
-        const preSptModLoader = container.resolve<PreSptModLoader>( "PreSptModLoader" );
         this.outputFolder = `${ preSptModLoader.getModPath( "leaves-barter_economy" ) }output/`;
-
-        this.modFolder = `${ preSptModLoader.getModPath( "leaves-barter_economy" ) }/`
 
         onUpdateModService.registerOnUpdate(
             "BarterEconomyUpdateTraders",
-            ( timeSinceLastRun: number ) => this.updateTraders( timeSinceLastRun, this.logger ),
+            ( timeSinceLastRun: number ) => this.updateTraders( timeSinceLastRun ),
             () => "BarterEconomyUpdateTraders" // new route name
         )
     }
@@ -164,7 +162,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
 
         this.originalTraders = structuredClone( this.db.getTables().traders );
 
-        this.printColor( "[Barter Economy] - Barter Economy Starting", LogTextColor.GREEN );
+        this.leavesUtils.printColor( "[Barter Economy] - Barter Economy Starting", LogTextColor.GREEN );
 
         const traderIDs: string[] = this.config.tradersToBarter;
         const traders = this.db.getTables().traders;
@@ -175,31 +173,31 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
 
         if ( this.config.saveloadBarters )
         {
-            const files = this.getFilesInFolder( "_savedbarters" );
+            const files = this.leavesUtils.getFilesInFolder( "_savedbarters" );
             for ( const file of files )
             {
-                const data = this.loadFile( `_savedbarters\\${ file }` );
-                const fileWithoutExtension = this.getFileWithoutExtension( file );
-                this.printColor( "[Barter Economy] Loaded saved data for: " + fileWithoutExtension );
+                const data = this.leavesUtils.loadFile( `_savedbarters\\${ file }` );
+                const fileWithoutExtension = this.leavesUtils.getFileWithoutExtension( file );
+                this.leavesUtils.printColor( "[Barter Economy] Loaded saved data for: " + fileWithoutExtension );
                 this.savedBarters[ fileWithoutExtension ] = data;
             }
         }
 
         //Print all existing traders, so players can see their IDs.
-        this.printColor( "[Barter Economy] All traders in the database:", LogTextColor.YELLOW );
+        this.leavesUtils.printColor( "[Barter Economy] All traders in the database:", LogTextColor.YELLOW );
         for ( const traderID in traders )
         {
-            this.printColor( `[Barter Economy] Trader ID: \"${ traderID }\" - Nickname: ${ traders[ traderID ].base.nickname }`, LogTextColor.YELLOW );
+            this.leavesUtils.printColor( `[Barter Economy] Trader ID: \"${ traderID }\" - Nickname: ${ traders[ traderID ].base.nickname }`, LogTextColor.YELLOW );
         }
         //Let user know that they should load this mod after other traders.
-        this.printColor( "[Barter Economy] If you don't see the trader you're looking for.\nmake sure it's loaded BEFORE this mod.", LogTextColor.YELLOW );
+        this.leavesUtils.printColor( "[Barter Economy] If you don't see the trader you're looking for.\nmake sure it's loaded BEFORE this mod.", LogTextColor.YELLOW );
 
         for ( const traderID of traderIDs )
         {
             //Check if trader exists
             if ( !traders[ traderID ] )
             {
-                this.printColor( `[Barter Economy] Trader ${ traderID } does not exist in the database.`, LogTextColor.RED );
+                this.leavesUtils.printColor( `[Barter Economy] Trader ${ traderID } does not exist in the database.`, LogTextColor.RED );
                 continue;
             }
 
@@ -231,7 +229,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
             }
 
             //Check if the item is in the item blacklist
-            if ( this.config.itemBlacklist.includes( item._id ) )
+            if ( this.itemBlacklist.includes( item._id ) )
             {
                 continue;
             }
@@ -242,9 +240,9 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
                 const multiplier = this.config.barterCategories[ item._parent ].multi;
 
                 let value = 0;
-                if ( this.config.manualTieredItems[ item._id ] )
+                if ( this.manualTieredItems[ item._id ] )
                 {
-                    value = this.config.manualTieredItems[ item._id ];
+                    value = this.manualTieredItems[ item._id ];
                 }
                 else
                 {
@@ -482,8 +480,8 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         if ( !assort.barter_scheme.hasOwnProperty( trade._id ) || !assort.barter_scheme[ trade._id ].hasOwnProperty( 0 ) )
         {
             //Trade is weird
-            this.printColor( "[Barter Economy] Somethings gone real wrong. Trying to access a missing barter scheme?", LogTextColor.RED );
-            this.printColor( `[Barter Economy] Item ID of broken trade is: ${ trade._tpl } TradeID: ${ trade._id }`, LogTextColor.RED );
+            this.leavesUtils.printColor( "[Barter Economy] Somethings gone real wrong. Trying to access a missing barter scheme?", LogTextColor.RED );
+            this.leavesUtils.printColor( `[Barter Economy] Item ID of broken trade is: ${ trade._tpl } TradeID: ${ trade._id }`, LogTextColor.RED );
         }
 
         //There are no trades that are bigger than one item that is a money trade.
@@ -636,7 +634,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
 
         if ( !assort.barter_scheme[ trade._id ] )
         {
-            this.printColor( `Item ${ trade._id } does not have a barter scheme. Defaulting to item value 1.`, LogTextColor.RED );
+            this.leavesUtils.printColor( `Item ${ trade._id } does not have a barter scheme. Defaulting to item value 1.`, LogTextColor.RED );
             return 1;
         }
 
@@ -680,7 +678,7 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         {
             if ( this.savedBarters[ traderID ] )
             {
-                this.printColor( "[Barter Economy] Applied saved barters for: " + traderID );
+                this.leavesUtils.printColor( "[Barter Economy] Applied saved barters for: " + traderID );
                 this.db.getTables().traders[ traderID ].assort = structuredClone( this.savedBarters[ traderID ] );
                 return;
             }
@@ -705,16 +703,16 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
             if ( !itemDB[ item._tpl ] )
             {
                 //Item doesn't exist in the global item database
-                this.printColor( "[Barter Economy] Found trade with item that doesn't exist in the global database. This is most likely caused by a mod doing something wrong.", LogTextColor.RED );
-                this.printColor( `[Barter Economy] Item ID of broken trade is: ${ item._tpl } TradeID: ${ item._id }`, LogTextColor.RED );
+                this.leavesUtils.printColor( "[Barter Economy] Found trade with item that doesn't exist in the global database. This is most likely caused by a mod doing something wrong.", LogTextColor.RED );
+                this.leavesUtils.printColor( `[Barter Economy] Item ID of broken trade is: ${ item._tpl } TradeID: ${ item._id }`, LogTextColor.RED );
                 continue;
             }
 
             if ( !itemDB[ item._tpl ]._parent )
             {
                 //Item exists but has no parent. 
-                this.printColor( "[Barter Economy] Found trade with item in the global database that has an invalid _parent entry. This is most likely caused by a mod doing something wrong.", LogTextColor.RED );
-                this.printColor( `[Barter Economy] Item ID of broken item is: ${ item._tpl } TradeID: ${ item._id }`, LogTextColor.RED );
+                this.leavesUtils.printColor( "[Barter Economy] Found trade with item in the global database that has an invalid _parent entry. This is most likely caused by a mod doing something wrong.", LogTextColor.RED );
+                this.leavesUtils.printColor( `[Barter Economy] Item ID of broken item is: ${ item._tpl } TradeID: ${ item._id }`, LogTextColor.RED );
                 continue;
             }
 
@@ -734,29 +732,14 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         if ( this.config.saveloadBarters )
         {
             this.savedBarters[ traderID ] = structuredClone( this.db.getTables().traders[ traderID ].assort );
-            this.saveFile( this.savedBarters[ traderID ], `_savedbarters\\${ traderID }.json`, true );
-            this.printColor( "[Barter Economy] Saved barters for: " + traderID );
+            this.leavesUtils.saveFile( this.savedBarters[ traderID ], `_savedbarters\\${ traderID }.json`, true );
+            this.leavesUtils.printColor( "[Barter Economy] Saved barters for: " + traderID );
         }
     }
 
     private getNumberBetweenZeroAnd( max: number )
     {
         return Math.floor( Math.random() * max );
-    }
-
-    private printColor( message: string, color: LogTextColor = LogTextColor.GREEN )
-    {
-        this.logger.logWithColor( message, color );
-    }
-
-    private debugJsonOutput<T>( jsonObject: T, label = "" )
-    {
-
-        if ( label.length > 0 )
-        {
-            this.logger.logWithColor( `[${ label }]`, LogTextColor.GREEN );
-        }
-        this.logger.logWithColor( JSON.stringify( jsonObject, null, 4 ), LogTextColor.MAGENTA );
     }
 
     private writeResult( prefix: string, data: any, extension = ".json", messagePrefix = "" ): void
@@ -770,15 +753,15 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         const fileName = `${ this.outputFolder + prefix }_${ date }_${ time }${ extension }`;
 
         // save file
-        this.vfs.writeFile( fileName, text );
-        this.printColor( `${ messagePrefix } Written results to: ${ fileName }`, LogTextColor.CYAN );
+        this.leavesUtils.saveFile( fileName, text );
+        this.leavesUtils.printColor( `${ messagePrefix } Written results to: ${ fileName }`, LogTextColor.CYAN );
     }
 
     private getLoyaltyLevel( assort: ITraderAssort, trade: IItem ): number
     {
         if ( !assort.loyal_level_items[ trade._id ] )
         {
-            this.printColor( `Item ${ trade._id } does not have a loyalty level. Defaulting to 1.`, LogTextColor.RED );
+            this.leavesUtils.printColor( `Item ${ trade._id } does not have a loyalty level. Defaulting to 1.`, LogTextColor.RED );
             return 1;
         }
         return assort.loyal_level_items[ trade._id ];
@@ -789,9 +772,9 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         const trader = this.currentLogFile;
         if ( reset )
         {
-            this.vfs.writeFile( this.outputFolder + this.currentLogFile, "" )
+            this.leavesUtils.saveFile( this.outputFolder + this.currentLogFile, "" )
         }
-        this.vfs.writeFile( this.outputFolder + this.currentLogFile, `${ line }\n`, true )
+        this.leavesUtils.saveFile( this.outputFolder + this.currentLogFile, `${ line }\n`, true )
     }
 
     private getLocaleName( ID: string )
@@ -801,43 +784,6 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
             return "Unknown";
         }
         return this.tables.locales.global[ this.locale ][ `${ ID } Name` ];
-    }
-
-    public loadFile( file: string ): any
-    {
-        return jsonc.parse( this.vfs.readFile( this.modFolder + file ) );
-    }
-    public saveFile( data: any, file: string, serialize: boolean = true )
-    {
-        let dataCopy = structuredClone( data );
-
-        if ( serialize )
-        {
-            dataCopy = this.jsonUtil.serialize( data, true );
-        }
-
-        this.vfs.writeFile( `${ this.modFolder }${ file }`, dataCopy );
-    }
-
-    public getFoldersInFolder( folder: string ): string[]
-    {
-        return this.vfs.getDirs( this.modFolder + folder );
-    }
-
-    public getFilesInFolder( folder: string ): string[]
-    {
-        return this.vfs.getFiles( this.modFolder + folder );
-    }
-
-    public getFileWithoutExtension( file: string ): string
-    {
-        return this.vfs.stripExtension( file );
-    }
-
-
-    public checkIfFileExists( file: string ): boolean
-    {
-        return this.vfs.exists( this.modFolder + file )
     }
 }
 

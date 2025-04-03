@@ -1,0 +1,65 @@
+{
+    //Force a tier on a specific item. But these will override any multiplier above, and any set tiers above.
+    "5e8488fa988a8701445df1e4": 2, //CALOK-B hemostatic applicator
+    "5e2aef7986f7746d3f3c33f5": 2, //Repellent
+    "5e2af00086f7746d3f3c33f7": 2, //Smoked Chimney drain cleaner
+    "5a2a57cfc4a2826c6e06d44a": 2, //RDG-2B smoke grenade
+    "5734781f24597737e04bf32a": 2, //DVD drive
+    "5d40412b86f7743cb332ac3a": 2, //Schaman shampoo
+    "57347c5b245977448d35f6e1": 2, //Bolts
+    "57347c77245977448d35f6e2": 2, //Screw Nuts
+    "577e1c9d2459773cd707c525": 2, //Printer Paper
+    "590a386e86f77429692b27ab": 2, //HDD
+    "573474f924597738002c6174": 2, //Chainlet
+    "61bf7b6302b3924be92fa8c3": 2, //Metal spare parts
+
+    "57347c2e24597744902c94a1": 5, //Power supply unity
+    "590c639286f774151567fa95": 5, //Tech Manual
+    "5d1b2ffd86f77425243e8d17": 5, //NIXXOR Lens
+
+    "62a09f32621468534a797acb": 7, //Pevko Beer
+    "60391a8b3364dc22b04d0ce5": 7, //Thermite
+    "5751a89d24597722aa0e8db0": 7, //Golden Star Balm
+    "590c657e86f77412b013051d": 7, //Grizzly medkit
+
+    "5d0376a486f7747d8050965c": 10, //Military Circuit Board
+    "5d40407c86f774318526545a": 10, //Vodka
+    "5734758f24597738025ee253": 10, //Golden Neck chain
+    "590c621186f774138d11ea29": 10, //Flash Drive
+    "5d403f9186f7743cac3f229b": 10, //Whiskey
+    "655c673673a43e23e857aebd": 10, //Scav figurine
+    "655c67782a1356436041c9c5": 10, //Ryzhy figurine
+
+    "5c052fb986f7746b2101e909": 15, //UHF RFID Reader
+
+    "5d1b36a186f7742523398433": 20, //Metal fuel tank
+    "5d1b371186f774253763a656": 20, //Expeditionary fuel tank
+    "62a0a16d0b9d3c46de5b6e97": 20, //Military Flash drive
+    "5d03784a86f774203e7e0c4d": 20, //Military Gyrotachometer
+    "5910968f86f77425cf569c32": 20, //Weapon repairkit
+    "59faff1d86f7746c51718c9c": 20, //Physical Bitcoin
+    "5af0534a86f7743b6f354284": 20, //Ophtalmoscope
+
+    "63a0b208f444d32d6f03ea1e": 35, //Fierce Blow sledgehammer 
+    "5c052f6886f7746b1e3db148": 35, //Military COFDM
+    "5c12613b86f7743bbe2c3f76": 35, //Intelligence Folder
+    "5c052e6986f7746b207bc3c9": 35, //Defibrillator
+    "5c05300686f7746dce784e5d": 35, //VPX
+    "57347ca924597744596b4e71": 35, //Graphics card
+
+    "5d0377ce86f774186372f689": 65, //Iridium
+    "591094e086f7747caa7bb2ef": 65, //Body armor repair kit
+    "5d1b2f3f86f774252167a52c": 65, //FP 100 filter
+    "6389c7750ef44505c87f5996": 65, //Microcontroller Board
+    "5c05308086f7746b2101e90b": 65, //Virtex
+    "5d03794386f77420415576f5": 65, //Tank battery
+    "5d03775b86f774203e7e0c4b": 65, //Phased array element
+    "66d9f7256916142b3b02276e": 65, //Radar station spare parts - Electronics",
+
+    "6389c85357baa773a825b356": 110, //Advanced Current Converter
+    "6389c7f115805221fb410466": 110, //Far forward GPS signal amplifier unit
+    "5c0530ee86f774697952d952": 110, //Ledx
+    "6389c8c5dbfd5e4b95197e6b": 110, //Blue folder
+    "6389c8fb46b54c634724d847": 110, //Silicon Optoelectronics textbook
+    "6389c92d52123d5dd17f8876": 110 //Advanced Electronics Materials
+}

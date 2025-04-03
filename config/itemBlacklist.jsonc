@@ -1,0 +1,102 @@
+//Items that shouldn't appear as viable "currency" for trades. Some seem to be quest items that aren't correctly tagged.
+[
+    "59f32bb586f774757e1e8442", //BEAR DOGTAG
+    "59f32c3b86f77472a31742f0", //USEC DOGTAG
+    "5e99711486f7744bfc4af328", //Sanitar first aid kit (not marked quest for some reason. Well done BSG)
+    "6391fcf5744e45201147080f", //Primorsky Ave apartment key
+    "5e99735686f7744bfc4af32c", //Sanitar's surgery kit...
+    "648c1a965043c4052a4f8505", //Ebudal???
+    "5df8a72c86f77412640e2e83", //Tree ornament (Silver)
+    "5df8a6a186f77412640e2e80", //Tree ornament (Red)
+    "5df8a77486f77412672a1e3f", //Tree ornament (violet)
+    "614451b71e5874611e2c7ae5", //Fake ass vodka. 
+
+    "6662e9aca7e0b43baa3d5f74", //"Item_barter_dogtags_bear_eod"
+    "6662e9f37fa79a6d83730fa0", //"Item_barter_dogtags_usec_eod"
+    "66588bb047fbd536a674240e", //"Locked valuables сrate (Common)"
+    "665886abdaadd1069736c539", //"Unlocked valuables сrate (Common)"
+    "66572bb3ac60f009f270d1df", //"Locked valuables сrate (Rare)"
+    "66573310a1657263d816a139", //"Unlocked valuables сrate (Rare)"
+    "665828f490486915542256c6", //"Locked valuables сrate (Epic)"
+    "665829a6efd94e2d665b14a8", //"Unlocked valuables сrate (Epic)"
+    "66588b6dcb48a73e674b2649", //"Locked weapon сrate (Common)"
+    "665888282c4a1b73af576b77", //"Unlocked weapon сrate (Common)"
+    "66572b3f6a723f7f005a066c", //"Locked weapon сrate (Rare)"
+    "665732e7ac60f009f270d1ef", //"Unlocked weapon сrate (Rare)"
+    "66582889efd94e2d665b14a2", //"Locked weapon сrate (Epic)"
+    "665829424de4820934746ce6", //"Unlocked weapon сrate (Epic)"
+    "66588ba291f6e93c4c06efef", //"Locked supply сrate (Common)"
+    "6658892e6e007c6f33662002", //"Unlocked supply сrate (Common)"
+    "66572b88ac60f009f270d1dc", //"Locked supply сrate (Rare)"
+    "665732f4464c4b4ba4670fa9", //"Unlocked supply сrate (Rare)"
+    "665828c44de4820934746ce4", //"Locked supply сrate (Epic)"
+    "66582972ac60f009f270d2aa", //"Unlocked supply сrate (Epic)"
+    "66588b514de4820934746dc6", //"Locked equipment сrate (Common)"
+    "6658876e146af22739040fad", //"Unlocked equipment сrate (Common)"
+    "66571bf06a723f7f005a0619", //"Locked equipment сrate (Rare)"
+    "665730fa4de4820934746c48", //"Unlocked equipment сrate (Rare)"
+    "6658285190486915542256c4", //"Locked equipment сrate (Epic)"
+    "6658291eefd94e2d665b14a4", //"Unlocked equipment сrate (Epic)"
+    "6389c88b33a719183c7f63b6", //"Ultralink Satellite Internet Station"
+
+    "6662e9cda7e0b43baa3d5f76", //New BEAR dogtag ID?
+    "6662ea05f6259762c56f3189", //New USEC dogtag ID?
+    "5b9b9020e7ef6f5716480215", //"dogtagt" whatever that means
+
+    //VACCINE??? ALSO DISBLE QUEST ITEMS??
+    "6707cc67cc1667e49e0f7232", //Infected blood sample
+    "6707cd70aab679420007e018", //TG-Vi-24 sample
+    "6707cef3571b50abc703b64f", //V.O. signed diary
+    "6707cf827d279daad80fa95f", //Vaccine sample IV
+    "6707d0804e617ec94f0e562f", //TG-Vi-24 lethal vaccine
+    "6707d0bdaab679420007e01a", //TG-Vi-24 true vaccine
+    "6707d13e4e617ec94f0e5631", //Flash drive with special software
+    "6707d1f9571b50abc703b651", //True vaccine recipe
+    "671a406a6d315b526708f103", //Stolen weapon case
+
+    //Weird stuff
+    "adrenal_debuff",
+    "clotting_debuff",
+    "damage_debuff",
+    "generic_debuff",
+    "performance_debuff",
+    "regen_debuff",
+    "weight_debuff",
+
+    //More cases?
+    "67408903268737ef6908d432", //Contraband box
+    "67409848d0b2f8eb9b034db9", //Sealed box
+    "6740987b89d5e1ddc603f4f0", //Locked case
+    "674098588466ebb03408b210", //Opened Box
+    "67449b6c89d5e1ddc603f504", //Case key
+
+    //not 100% sure. But don't seem to spawn in spt at least.
+    "6656560053eaaa7a23349c86", //Lega Medal - Jewelry",
+    "660bbc98c38b837877075e4a", //Decrypted flash drive - Info
+    "660bc341c38b837877075e4c", //Documents with decrypted data - Info
+    "660bbc47c38b837877075e47", //Encrypted flash drive - Info
+    "6331ba83f2ab4f3f09502983", //Secure Flash drive V2 - Info
+    "6638a5474e92f038531e210e", //Mr Kerman's cat hologram - Jewelry
+    "66d9f7e7099cf6adcc07a369", //KOSA UAV electronic jamming device - Electronics
+    "66d9f7256916142b3b02276e", //Radar station spare parts - Electronics",
+    "66d9f8744827a77e870ecaf1", //GARY ZONT portable electronic warfare device - Electronics
+
+    "674dbf593bee1152d407f005", // Priestige 1 Dogtag
+    "675dc9d37ae1a8792107ca96", // Priestige 1 Dogtag Bear
+    "6764207f2fa5e32733055c4a", // Priestige 1 Dogtag Usec
+
+    "675dcfea7ae1a8792107ca99", // Priestige 2 Dogtag
+    "675dcb0545b1a2d108011b2b", // Priestige 2 Dogtag Bear
+    "6764202ae307804338014c1a", // Priestige 2 Dogtag Usec
+
+
+    "675aaae75a3ab8372d0b02a7", // Note with Code Word Adaptation
+    "675aaae1dcf102478202c537", // Note with Code Word Onyx
+    "675aaaf674a7619a5304c233", // Note with Code Word Ark
+    "675aab0d6b6addc02a08f097", // Note with Code Word Heartbeat
+    "675aaab74bca0b001d02f356", // Note with Code Word Voron
+
+    "675aaa9a3107dac100063331", // Minefield Map (Woods)
+    "675aaa8f7f3c962069072b27", // Minefield Map (Lighthouse)
+    "675aaa003107dac10006332f" // Minefield Map (Reserve)
+]
