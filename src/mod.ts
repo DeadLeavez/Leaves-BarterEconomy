@@ -31,7 +31,6 @@ import { LeavesUtils } from "./deps/LeavesUtils";
 
 class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
 {
-    private logger: ILogger;
     private db: DatabaseServer;
     private tables: IDatabaseTables;
     private handbookHelper: HandbookHelper;
@@ -123,8 +122,6 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
 
     public preSptLoad( container: DependencyContainer ): void
     {
-        // Get the logger from the server container.
-        this.logger = container.resolve<ILogger>( "WinstonLogger" );
         // Get database from server.
         this.db = container.resolve<DatabaseServer>( "DatabaseServer" );
         this.handbookHelper = container.resolve<HandbookHelper>( "HandbookHelper" );
