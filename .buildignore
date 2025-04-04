@@ -10,6 +10,7 @@
 /.nvmrc
 /.prettierrc
 /.vscode
+/crowdin.yml
 /build.mjs
 /dist
 /images
@@ -23,3 +24,9 @@
 /src/*.js.map
 /output/*
 /redirect.jsonc
+/example_stuff
+/user
+/IMAGES/*
+/updatedeps.ts
+/src/deps/*.js
+/*.js

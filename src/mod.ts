@@ -747,11 +747,10 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
         // get file name
         const date = this.timeUtil.getDate();
         const time = this.timeUtil.getTime();
-        const fileName = `${ this.outputFolder + prefix }_${ date }_${ time }${ extension }`;
+        const fileName = `${ prefix }_${ date }_${ time }${ extension }`;
 
         // save file
-        this.leavesUtils.saveFile( fileName, text );
-        this.leavesUtils.printColor( `${ messagePrefix } Written results to: ${ fileName }`, LogTextColor.CYAN );
+        this.leavesUtils.saveFile( text, "output/" + fileName, false );
     }
 
     private getLoyaltyLevel( assort: ITraderAssort, trade: IItem ): number
@@ -766,12 +765,13 @@ class BarterEconomy implements IPostDBLoadMod, IPreSptLoadMod
 
     private writeLogFileLine( line: string, reset = false )
     {
-        const trader = this.currentLogFile;
         if ( reset )
         {
-            this.leavesUtils.saveFile( this.outputFolder + this.currentLogFile, "" )
+            //empty the file
+            this.leavesUtils.saveFile( "", this.outputFolder + this.currentLogFile, false );
         }
-        this.leavesUtils.saveFile( this.outputFolder + this.currentLogFile, `${ line }\n`, true )
+        //Append to file
+        this.leavesUtils.appendFile( `${ line }\n`, this.outputFolder + this.currentLogFile );
     }
 
     private getLocaleName( ID: string )

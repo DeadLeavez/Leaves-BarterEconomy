@@ -5,7 +5,7 @@ Built with a foundation of customization, the mod has many many knobs to turn so
 
 There is a seed functionality, along with settings on whether to update whenever traders do or not. One set of trades for your entire run? Update your seed once a week, or once a day. The choice is in your hands.
 
-Unlike my other mods, this one's config is simply too big put in here. So instead. if you think this idea is something you'd enjoy. I recommend you to dig into the config file with a text editor that supports ``jsonc`` files. The config is filled with comments and details on what everything does. Personally, I HIGHLY recommend using Visual Studio Code, to edit the config. [VSCode](https://code.visualstudio.com/)
+Unlike my other mods, this one's config is simply too big put in here. So instead, if you think this idea is something you'd enjoy. I recommend you to dig into the config file with a text editor that supports ``jsonc`` files. The config is filled with comments and details on what everything does. Personally, I HIGHLY recommend using Visual Studio Code, to edit the config. [VSCode](https://code.visualstudio.com/)
 
 
 The config file is found in the ``\Leaves-BarterEconomy\config\`` folder.
@@ -117,3 +117,10 @@ OLD CONFIGS are NOT compatible
 
 ## 1.1.7
 - Updated blacklist
+- Changed config structure (moved itemblacklist and manuallytiereditems to their own files.)
+- Still supports 3.10.x
+
+OLD CONFIGS are compatible (but it will no longer load the mentioned above entries from the config.jsonc file, move them to the new files if you want to keep using your already existing configs properly.)
+
+## 1.1.8
+- Fix multiple issues with files.

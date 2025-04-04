@@ -5,7 +5,7 @@ async function main()
 {
     let vfs = new VFS();
     const currentDir = path.dirname(__filename);
-    vfs.copyDir(currentDir + "/../deps/", currentDir + "/src/Deps/files/")
+    vfs.copyDir(currentDir + "/../Deps/files", currentDir + "/src/deps/")
 }
 
 main();

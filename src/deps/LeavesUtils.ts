@@ -85,6 +85,11 @@ export class LeavesUtils
         this.vfs.writeFile( `${ this.modFolder }${ file }`, dataCopy );
     }
 
+    public appendFile( data: string, file: string )
+    {
+        this.vfs.writeFile( file, data, true );
+    }
+
     public getFoldersInFolder( folder: string ): string[]
     {
         return this.vfs.getDirs( this.modFolder + folder );
